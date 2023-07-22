@@ -8,7 +8,7 @@ on:
 env:
     SQLFLUFF_DIALECT: postgres
     DOCKER_IMAGE: redgate/flyway
-	SCHEMAS: public
+    SCHEMAS: public
  
 jobs:
   Continuous-Integration-Build:
