@@ -1,4 +1,4 @@
-name: Liquibase_Action
+name: Flyway_Action
 
 on:
   workflow_dispatch:
@@ -9,14 +9,41 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  LBJobDockerCLI:
+  FWJobDockerCLI:
     runs-on: ubuntu-latest
-    steps: 
-    - uses: actions/checkout@v2
-    
-    - name: Run 'Flyway status' in a Docker Container	    
-      uses: docker://redgate/flyway:latest
-      with:
-        args: --url=jdbc:singlestore://svc-4f5248c3-aa85-45d7-a05f-eebd9cc0ccf9-dml.aws-virginia-6.svc.singlestore.com:3306/s2_dataset_martech_fb308a56 --changeLogFile=./Docker/changeLog.h2.sql --username=admin --password=password status --verbose
-    
-
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.0.0
+               
+      - name: Continuous Integration Flyway Clean Migrate
+        run: >-
+          docker run --rm
+          --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
+          "${{ env.DOCKER_IMAGE }}"
+          -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+          -url="${{ secrets.DB_BUILD_URL }}"
+          -user="${{ secrets.DB_BUILD_USERNAME }}"
+          -password="${{ secrets.DB_BUILD_PASSWORD }}"
+          -cleanDisabled=false clean migrate -schemas="${{ env.SCHEMAS }}"
+       - name: Flyway Info
+        run: >-
+          docker run --rm
+          --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
+          "${{ env.DOCKER_IMAGE }}"
+          -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+          -url="${{ secrets.DB_BUILD_URL }}"
+          -user="${{ secrets.DB_BUILD_USERNAME }}"
+          -password="${{ secrets.DB_BUILD_PASSWORD }}" 
+          info -schemas="${{ env.SCHEMAS }}"
+ 
+      - name: Flyway Info Production
+        run: >-
+          docker run --rm
+          --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
+          "${{ env.DOCKER_IMAGE }}"
+          -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+          -url="${{ secrets.DB_PROD_URL }}"
+          -user="${{ secrets.DB_PROD_USERNAME }}" 
+          -password="${{ secrets.DB_PROD_PASSWORD }}"
+          info -schemas="${{ env.SCHEMAS }}"
+ 
