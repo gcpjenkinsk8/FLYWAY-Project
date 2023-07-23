@@ -27,7 +27,7 @@ jobs:
   build:
     name: Deploy Build
     # The type of runner that the job will run on
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     environment: 'build' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
     env:
       stage: 'Build'
@@ -82,7 +82,7 @@ jobs:
   prod-preparation:
       name: Production Deployment Preparation - Report Creation
       # The type of runner that the job will run on
-      runs-on: self-hosted
+      runs-on: ubuntu-latest
       environment: 'prod' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured
       if: ${{ true }} #Set this variable to false to temporarily disable the job
       needs: build
@@ -130,7 +130,7 @@ jobs:
   prod:
     name: Deploy Production
     # The type of runner that the job will run on
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     environment: 'prod' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
     if: ${{ true }} #Set this variable to false to temporarily disable the job
     needs: prod-preparation
