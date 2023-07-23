@@ -1,4 +1,4 @@
-name: 'PostgreSQL GitHub DevOps Pipeline'
+name: 'Flyway GitHub Pipeline'
  
 on:
   push:
