@@ -1,6 +1,8 @@
-CREATE TABLE users
-(
-    id       BIGSERIAL PRIMARY KEY,
-    username VARCHAR(200) NOT NULL,
-    age      INTEGER      NOT NULL
-)
+-- create a table Companies with name, id, address, email, and phone number
+CREATE TABLE Companios (
+  id int,
+  name varchar(50),
+  address text,
+  email varchar(50),
+  phone varchar(10)
+);
