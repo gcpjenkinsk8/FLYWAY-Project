@@ -69,6 +69,22 @@ jobs:
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}"  
           info -schemas="${{ env.SCHEMAS }}" 
+      - run: >-    
+          docker run --rm
+          --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
+          "${{ env.DOCKER_IMAGE }}"
+          -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+          -url="${{ secrets.DB_TEST_URL }}"
+          -user="${{ secrets.DB_TEST_USERNAME }}"
+          -password="${{ secrets.DB_TEST_PASSWORD }}" 
+      - run: >-    
+          docker run --rm
+          --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
+          "${{ env.DOCKER_IMAGE }}"
+          -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+          -url="${{ secrets.DB_TEST_URL }}"
+          -user="${{ secrets.DB_TEST_USERNAME }}"
+          -password="${{ secrets.DB_TEST_PASSWORD }}"           
           migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=true
           info -schemas="${{ env.SCHEMAS }}"
 
