@@ -8,8 +8,7 @@ on:
 env:
     SQLFLUFF_DIALECT: mysql
     DOCKER_IMAGE: redgate/flyway
-    SCHEMAS: devdb
-    SCHEMAS1: proddb
+    SCHEMAS: public
  
 jobs:
   Continuous-Integration-Build:
