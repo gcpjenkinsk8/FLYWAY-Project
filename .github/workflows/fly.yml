@@ -8,7 +8,8 @@ on:
 env:
     SQLFLUFF_DIALECT: mysql
     DOCKER_IMAGE: redgate/flyway
-    SCHEMAS: public
+    SCHEMAS: devdb
+    SCHEMAS1: proddb
  
 jobs:
   Continuous-Integration-Build:
@@ -49,7 +50,7 @@ jobs:
           -url="${{ secrets.DB_PROD_URL }}"
           -user="${{ secrets.DB_PROD_USERNAME }}" 
           -password="${{ secrets.DB_PROD_PASSWORD }}"
-          info -schemas="${{ env.SCHEMAS }}"
+          info -schemas="${{ env.SCHEMAS1 }}"
           
   Deploy-Test:
       name: Deploy Test
@@ -102,7 +103,7 @@ jobs:
           -url="${{ secrets.DB_PROD_URL }}"
           -user="${{ secrets.DB_PROD_USERNAME }}"
           -password="${{ secrets.DB_PROD_PASSWORD }}" 
-          info -schemas="${{ env.SCHEMAS }}"
+          info -schemas="${{ env.SCHEMAS1 }}"
        - run: >-
           docker run --rm
           --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
@@ -111,7 +112,7 @@ jobs:
           -url="${{ secrets.DB_PROD_URL }}"
           -user="${{ secrets.DB_PROD_USERNAME }}"
           -password="${{ secrets.DB_PROD_PASSWORD }}" 
-          migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=true
+          migrate -schemas="${{ env.SCHEMAS1 }}" -outOfOrder=true
        - run: >-
           docker run --rm
           --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
@@ -120,5 +121,5 @@ jobs:
           -url="${{ secrets.DB_PROD_URL }}"
           -user="${{ secrets.DB_PROD_USERNAME }}"
           -password="${{ secrets.DB_PROD_PASSWORD }}"
-          info -schemas="${{ env.SCHEMAS }}"
+          info -schemas="${{ env.SCHEMAS1 }}"
                  
