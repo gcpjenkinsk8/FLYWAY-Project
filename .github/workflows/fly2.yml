@@ -1,9 +1,11 @@
-name: 'Flyway GitHub Pipeline'
+name: 'Flyway GitHub Prod Pipeline'
  
 on:
   workflow_run:
-    branches:
-      - main
+    workflows:
+      - Flyway GitHub Dev Pipeline
+    types:
+      - completed
       
 env:
     SQLFLUFF_DIALECT: mysql
