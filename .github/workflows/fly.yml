@@ -1,7 +1,7 @@
 name: 'Flyway GitHub Dev Pipeline'
  
 on:
-  push:
+ push:
     branches:
       - main
       
@@ -65,7 +65,7 @@ jobs:
           -url="${{ secrets.DB_TEST_URL }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}"   
-          migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=true -ValidateOnMigrate=true
+          migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=true -validateOnMigrate=true
       - run: >-
           docker run --rm
           --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
