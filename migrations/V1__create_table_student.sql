@@ -1,4 +1,4 @@
-CREATE TABLE Student   
+CREATE TABLE employees  
 (  
 Roll_No. Int ,    
 First_Name Varchar (20) ,    
