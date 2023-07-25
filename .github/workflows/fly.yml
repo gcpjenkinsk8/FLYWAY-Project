@@ -39,7 +39,7 @@ jobs:
           -url="${{ secrets.DB_BUILD_URL }}"
           -user="${{ secrets.DB_BUILD_USERNAME }}"
           -password="${{ secrets.DB_BUILD_PASSWORD }}" 
-          -dryRun -schemas="${{ env.SCHEMAS }}"
+          flyway info -dryRun -schemas="${{ env.SCHEMAS }}"
           
   Deploy-Test:
       name: Deploy Test
