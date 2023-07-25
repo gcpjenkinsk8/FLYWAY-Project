@@ -1,9 +1,7 @@
 name: 'Flyway GitHub Dev Pipeline'
  
 on:
- push:
-    branches:
-      - main
+ workflow_dispatch:
       
 env:
     SQLFLUFF_DIALECT: mysql
