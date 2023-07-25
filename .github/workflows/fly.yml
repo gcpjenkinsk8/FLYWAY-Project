@@ -20,7 +20,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3.0.0
                        
-      - name: Continuous Integration Flyway Clean Migrate
+      - name: Info Check
         run: >-
           docker run --rm
           --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
@@ -39,7 +39,7 @@ jobs:
           -url="${{ secrets.DB_BUILD_URL }}"
           -user="${{ secrets.DB_BUILD_USERNAME }}"
           -password="${{ secrets.DB_BUILD_PASSWORD }}" 
-          migrate -dryRunOutput="--volume ${{ github.workspace }}/dryrun.sql"
+          info -schemas="${{ env.SCHEMAS }}"
           
   Deploy-Test:
       name: Deploy Test
