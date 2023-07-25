@@ -1,4 +1,4 @@
-CREATE TABLE IndustryAAB (
+CREATE TABLE IndustryAABBB (
   id int,
   name varchar(50),
   address text,
