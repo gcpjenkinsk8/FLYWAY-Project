@@ -1,4 +1,4 @@
-name: 'Flyway GitHub Dev Pipeline'
+name: 'Dry Run Check'
  
 on:
  workflow_dispatch:
