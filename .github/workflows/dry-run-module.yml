@@ -23,9 +23,16 @@ jobs:
         run: |
           wget -qO /tmp/flyway.tar.gz https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/9.21.0/flyway-commandline-9.21.0-linux-x64.tar.gz
           tar -xzf /tmp/flyway.tar.gz -C /tmp/
+          sudo mv /tmp/flyway-9.21.0 /usr/local/flyway
+          sudo ln -s /usr/local/flyway/flyway /usr/local/bin/flyway
+          # Download the SingleStore JDBC9.21.0 driver
+          wget -qO /tmp/memsql-connector-java-3.2.1.jar https://search.maven.org/remotecontent?filepath=com/memsql/memsql-connector-java/3.2.1/memsql-connector-java-3.2.1.jar
+          # Move the SingleStore JDBC driver to Flyway's drivers folder
+          sudo mv /tmp/memsql-connector-java-3.2.1.jar /usr/local/flyway/drivers/
+          
         # Add error handling if the download fails
 
       # Run Flyway dry run (using the downloaded version)
-      - name: Flyway Dry Run
-        run: /tmp/flyway-9.21.0/flyway migrate -dryRunOutput="--volume ${{ github.workspace }}/dryrun.log" -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}" -url=jdbc:singlestore://svc-4f5248c3-aa85-45d7-a05f-eebd9cc0ccf9-dml.aws-virginia-6.svc.singlestore.com:3306/devdb -user=admin -password=Ovin@123
+      - name: Flyway Dry Run/usr/local/flyway/
+        run: /usr/local/flyway/flyway-9.21.0/flyway migrate -dryRunOutput="--volume ${{ github.workspace }}/dryrun.log" -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}" -url=jdbc:singlestore://svc-4f5248c3-aa85-45d7-a05f-eebd9cc0ccf9-dml.aws-virginia-6.svc.singlestore.com:3306/devdb -user=admin -password=Ovin@123
         # Add the failure handling as previously shown
