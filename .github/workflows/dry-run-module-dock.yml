@@ -1,4 +1,4 @@
-name: 'Dry Run Check'
+name: 'Dry Run Module'
  
 on:
  workflow_dispatch:
