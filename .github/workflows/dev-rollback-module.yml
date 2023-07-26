@@ -1,11 +1,7 @@
 name: 'Flyway GitHub Dev Rollback'
  
 on:
-  workflow_run:
-    workflows:
-      - Flyway Dev Deploy Module
-    types:
-      - completed
+ workflow_dispatch:
       
 env:
     DOCKER_IMAGE: redgate/flyway
