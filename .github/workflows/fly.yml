@@ -27,7 +27,7 @@ jobs:
           -url="${{ secrets.DB_BUILD_URL }}"
           -user="${{ secrets.DB_BUILD_USERNAME }}"
           -password="${{ secrets.DB_BUILD_PASSWORD }}"
-          info -schemas="${{ env.SCHEMAS }}"
+          -cleanDisabled=false clean migrate -schemas="${{ env.SCHEMAS }}"
       - name: Flyway Info
         run: >-
           docker run --rm
