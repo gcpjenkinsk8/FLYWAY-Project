@@ -6,3 +6,4 @@ CREATE TABLE Companies (
   email varchar(50),
   phone varchar(10)
 );
+CXCX CX
