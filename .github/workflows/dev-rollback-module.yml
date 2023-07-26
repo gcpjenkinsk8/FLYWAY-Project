@@ -1,9 +1,9 @@
-name: 'Flyway GitHub Dev Pipeline'
+name: 'Flyway GitHub Dev Rollback'
  
 on:
   workflow_run:
     workflows:
-      - Flyway GitHub Dev Deploy Module Pipeline
+      - Flyway GitHub Dev Rollback
     types:
       - completed
       
