@@ -1,0 +1,36 @@
+name: 'Flyway GitHub Dev Pipeline'
+ 
+on:
+ push:
+    branches:
+      - main
+      
+env:
+    SQLFLUFF_DIALECT: mysql
+    DOCKER_IMAGE: redgate/flyway
+    SCHEMAS: devdb
+    SCHEMAS1: proddb
+ 
+jobs:
+  Dry-run-Job:
+    name: Dry Run / Syntax Checking
+    runs-on: ubuntu-20.04
+ 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.0.0
+        
+      - name: Flyway Info
+        run: >-
+          docker run --rm
+          --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
+          "${{ env.DOCKER_IMAGE }}"
+          -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+          -url="${{ secrets.DB_BUILD_URL }}"
+          -user="${{ secrets.DB_BUILD_USERNAME }}"
+          -password="${{ secrets.DB_BUILD_PASSWORD }}" 
+          migrate -dryRunOutput="--volume ${{ github.workspace }}/dryrun.sql"
+          
+
+
+ 
