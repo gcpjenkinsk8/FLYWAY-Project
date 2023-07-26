@@ -21,11 +21,11 @@ jobs:
       # Download Flyway CLI
       - name: Download Flyway
         run: |
-          wget -qO /tmp/flyway.tar.gz https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/8.0.2/flyway-commandline-8.0.2-linux-x64.tar.gz
+          wget -qO /tmp/flyway.tar.gz https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/9.21.0/flyway-commandline-9.21.0-linux-x64.tar.gz
           tar -xzf /tmp/flyway.tar.gz -C /tmp/
         # Add error handling if the download fails
 
       # Run Flyway dry run (using the downloaded version)
       - name: Flyway Dry Run
-        run: /tmp/flyway-8.0.2/flyway migrate -dryRunOutput="--volume ${{ github.workspace }}/dryrun.log" -url=jdbc:singlestore://svc-4f5248c3-aa85-45d7-a05f-eebd9cc0ccf9-dml.aws-virginia-6.svc.singlestore.com:3306/devdb -user=admin -password=Ovin@123
+        run: /tmp/flyway-9.21.0/flyway migrate -dryRunOutput="--volume ${{ github.workspace }}/dryrun.log" -url=jdbc:singlestore://svc-4f5248c3-aa85-45d7-a05f-eebd9cc0ccf9-dml.aws-virginia-6.svc.singlestore.com:3306/devdb -user=admin -password=Ovin@123
         # Add the failure handling as previously shown
