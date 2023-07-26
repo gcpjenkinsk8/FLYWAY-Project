@@ -31,7 +31,7 @@ jobs:
       - name: Flyway Dry Run
         run: |
           # Replace the following with the appropriate Flyway command based on your setup
-          ./flyway/flyway migrate -dryRunOutput="--volume ${{ github.workspace }}/dryrun.log" -url=jdbc:singlestore://svc-4f5248c3-aa85-45d7-a05f-eebd9cc0ccf9-dml.aws-virginia-6.svc.singlestore.com:3306/devdb -user=admin -password=Ovin@123
+          migrate -dryRunOutput="--volume ${{ github.workspace }}/dryrun.log" -url=jdbc:singlestore://svc-4f5248c3-aa85-45d7-a05f-eebd9cc0ccf9-dml.aws-virginia-6.svc.singlestore.com:3306/devdb -user=admin -password=Ovin@123
           if [ $? -ne 0 ]; then
             echo "Flyway dry run failed. Check the dry run log:"
             cat /tmp/flyway_dryrun.log
