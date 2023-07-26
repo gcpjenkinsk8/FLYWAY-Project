@@ -1,9 +1,9 @@
-name: 'Flyway Dev Deploy Module'
+name: 'Sanity Test Module'
  
 on:
   workflow_run:
     workflows:
-      - Dry Run Module
+      - Flyway Dev Deploy Module
     types:
       - completed
       
