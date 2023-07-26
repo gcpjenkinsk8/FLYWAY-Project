@@ -1,8 +1,7 @@
-CREATE TABLE employees  
-(  
-Roll_No. Int ,    
-First_Name Varchar (20) ,    
-Last_Name Varchar (20) ,    
-Age Int ,  
-Marks Int ,   
-) ;   
+CREATE TABLE employees (
+  employee_id INT PRIMARY KEY,
+  first_name VARCHAR(50),
+  last_name VARCHAR(50),
+  department VARCHAR(100),
+  salary DECIMAL(10, 2)
+);
