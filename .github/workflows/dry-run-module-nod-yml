@@ -1,4 +1,4 @@
-name: Flyway-Dry-Run-Module
+name: Flyway-Dry-Run-Module-nod
 
 on:
  workflow_dispatch:
