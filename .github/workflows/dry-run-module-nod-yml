@@ -1,0 +1,24 @@
+name: Flyway-Dry-Run-Module
+
+on:
+ workflow_dispatch:
+
+jobs:
+  flyway_migration:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      # Set up Java (required for Flyway)
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      # Run Flyway dry run (using the downloaded version)
+      - name: Flyway Dry Run
+        run: flyway migrate -dryRunOutput="--volume ${{ github.workspace }}/dryrun.log" -url=jdbc:singlestore://svc-4f5248c3-aa85-45d7-a05f-eebd9cc0ccf9-dml.aws-virginia-6.svc.singlestore.com:3306/devdb -user=admin -password=Ovin@123
+        # Add the failure handling as previously shown
