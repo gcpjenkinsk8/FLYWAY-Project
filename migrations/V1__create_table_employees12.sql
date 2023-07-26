@@ -5,3 +5,4 @@ CREATE TABLE employee (
   email varchar(50),
   phone varchar(10)
 );
+dsd
