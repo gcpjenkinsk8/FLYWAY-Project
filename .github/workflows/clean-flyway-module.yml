@@ -1,0 +1,65 @@
+name: 'Clean Module'
+ 
+on:
+ workflow_dispatch:
+      
+env:
+    SQLFLUFF_DIALECT: mysql
+    DOCKER_IMAGE: redgate/flyway
+    SCHEMAS: devdb
+    SCHEMAS1: proddb
+ 
+jobs:
+  Dry-run-Job:
+    name: Clean Flyway Job
+    runs-on: ubuntu-20.04
+ 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.0.0
+        
+      - name: Flyway Info
+        run: >-
+          docker run --rm
+          --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
+          "${{ env.DOCKER_IMAGE }}"
+          -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+          -url="${{ secrets.DB_BUILD_URL }}"
+          -user="${{ secrets.DB_BUILD_USERNAME }}"
+          -password="${{ secrets.DB_BUILD_PASSWORD }}" 
+          info -schemas="${{ env.SCHEMAS }}"
+          
+      - name: Flyway Clean Dev
+        run: >-
+          docker run --rm
+          --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
+          "${{ env.DOCKER_IMAGE }}"
+          -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+          -url="${{ secrets.DB_BUILD_URL }}"
+          -user="${{ secrets.DB_BUILD_USERNAME }}"
+          -password="${{ secrets.DB_BUILD_PASSWORD }}"
+          -cleanDisabled=false clean migrate -schemas="${{ env.SCHEMAS }}"
+          
+      - name: Flyway Clean Prod
+        run: >-
+          docker run --rm
+          --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
+          "${{ env.DOCKER_IMAGE }}"
+          -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+          -url="${{ secrets.DB_BUILD_URL }}"
+          -user="${{ secrets.DB_BUILD_USERNAME }}"
+          -password="${{ secrets.DB_BUILD_PASSWORD }}"
+          -cleanDisabled=false clean migrate -schemas="${{ env.SCHEMAS1 }}"
+          
+      - name: Flyway Info
+        run: >-
+          docker run --rm
+          --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
+          "${{ env.DOCKER_IMAGE }}"
+          -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+          -url="${{ secrets.DB_BUILD_URL }}"
+          -user="${{ secrets.DB_BUILD_USERNAME }}"
+          -password="${{ secrets.DB_BUILD_PASSWORD }}" 
+          info -schemas="${{ env.SCHEMAS }}"
+          
+          
