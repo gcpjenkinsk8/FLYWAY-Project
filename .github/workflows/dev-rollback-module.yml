@@ -1,0 +1,43 @@
+name: 'Flyway GitHub Dev Rollback'
+ 
+on:
+  workflow_run:
+    workflows:
+      - Flyway Dev Deploy Module
+    types:
+      - completed
+      
+env:
+    DOCKER_IMAGE: redgate/flyway
+    SCHEMAS: devdb
+    SCHEMAS1: proddb
+ 
+jobs:
+ Failed-Action:
+      name: Rollback Job
+      runs-on: ubuntu-20.04
+      if: ${{ github.event.workflow_run.conclusion == 'failed' }}
+      steps:
+      - uses: actions/checkout@v3.0.0
+      
+      - name: Notify Failure
+        run: echo "The 'build' job has failed. Taking appropriate action..."
+        
+      - run: >-
+          docker run --rm
+          --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
+          "${{ env.DOCKER_IMAGE }}"
+          -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+          -url="${{ secrets.DB_TEST_URL }}"
+          -user="${{ secrets.DB_TEST_USERNAME }}"
+          -password="${{ secrets.DB_TEST_PASSWORD }}"   
+          undo -target=2 -schemas="${{ env.SCHEMAS }}"
+      - run: >-
+          docker run --rm
+          --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
+          "${{ env.DOCKER_IMAGE }}"
+          -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+          -url="${{ secrets.DB_TEST_URL }}"
+          -user="${{ secrets.DB_TEST_USERNAME }}"
+          -password="${{ secrets.DB_TEST_PASSWORD }}"   
+          info -schemas="${{ env.SCHEMAS }}"
