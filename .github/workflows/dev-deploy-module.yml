@@ -3,7 +3,7 @@ name: 'Flyway Dev Deploy Module'
 on:
   workflow_run:
     workflows:
-      - Dry Run Check
+      - Dry Run Module
     types:
       - completed
       
