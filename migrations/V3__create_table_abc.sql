@@ -1,5 +1,5 @@
 -- create a table Companies with name, id, address, email, and phone number
-CREATE TABLE Companies (
+CREATE TABLE CompaniesZ (
   id int,
   name varchar(50),
   address text,
