@@ -31,7 +31,7 @@ jobs:
           -url="${{ secrets.DB_TEST_URL }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}"   
-          undo -target=2 -schemas="${{ env.SCHEMAS }}"
+          undo -schemas="${{ env.SCHEMAS }}"
       - run: >-
           docker run --rm
           --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
