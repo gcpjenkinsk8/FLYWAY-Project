@@ -27,7 +27,7 @@ jobs:
           -url="${{ secrets.DB_BUILD_URL }}"
           -user="${{ secrets.DB_BUILD_USERNAME }}"
           -password="${{ secrets.DB_BUILD_PASSWORD }}"
-          -cleanDisabled=false clean migrate -schemas="${{ env.SCHEMAS }}"
+          info -schemas="${{ env.SCHEMAS }}"
       - name: Flyway Info
         run: >-
           docker run --rm
@@ -37,7 +37,7 @@ jobs:
           -url="${{ secrets.DB_BUILD_URL }}"
           -user="${{ secrets.DB_BUILD_USERNAME }}"
           -password="${{ secrets.DB_BUILD_PASSWORD }}" 
-          info -schemas="${{ env.SCHEMAS }}"
+          -cleanDisabled=false clean migrate -schemas="${{ env.SCHEMAS }}" 
           
   Deploy-Test:
       name: Deploy Test
@@ -63,7 +63,7 @@ jobs:
           -url="${{ secrets.DB_TEST_URL }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}"   
-          migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=true -validateOnMigrate=true
+          migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=true
       - run: >-
           docker run --rm
           --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
