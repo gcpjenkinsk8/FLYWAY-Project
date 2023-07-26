@@ -3,7 +3,7 @@ name: 'Flyway GitHub Dev Rollback'
 on:
   workflow_run:
     workflows:
-      - Flyway GitHub Dev Rollback
+      - Flyway Dev Deploy Module
     types:
       - completed
       
