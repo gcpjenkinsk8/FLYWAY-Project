@@ -1,4 +1,4 @@
-CREATE TABLE India (
+CREATE TABLESX India (
   id int,
   name varchar(50),
   address text,
