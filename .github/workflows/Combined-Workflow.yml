@@ -112,7 +112,7 @@ jobs:
           -url="${{ secrets.DB_TEST_URL }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}"   
-          validate -schemas="${{ env.SCHEMAS }}"
+          migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=true -validateOnMigrate=true
       - run: >-
           docker run --rm
           --volume ${{ github.workspace }}/sanity-test:/flyway/sql:ro
