@@ -28,6 +28,7 @@ jobs:
           -user="${{ secrets.DB_BUILD_USERNAME }}"
           -password="${{ secrets.DB_BUILD_PASSWORD }}" 
           migrate -dryRunOutput="--volume ${{ github.workspace }}/dryrun.sql"
+        
           
   Deploy-Test:
       name: Real Schema Info Check
@@ -43,7 +44,7 @@ jobs:
           -url="${{ secrets.DB_TEST_URL }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}"  
-          info -schemas="${{ env.SCHEMAS }}"
+          info -dryRunSql
 
 
  
