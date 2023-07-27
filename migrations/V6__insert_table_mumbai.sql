@@ -1,0 +1,1 @@
+INSERT INTO MUMBAI values (1,2,3);
