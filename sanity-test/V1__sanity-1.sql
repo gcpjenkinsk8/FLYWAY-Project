@@ -1,2 +1,2 @@
-SELECT * FROM companies;
-SELECT * FROM employees12;
+SELECT * FROM Companies;
+SELECT * FROM employee;
