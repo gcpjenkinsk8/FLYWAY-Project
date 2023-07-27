@@ -1,4 +1,4 @@
-name: 'Dry Run Module'
+name: 'Combined Pipeline'
  
 on:
  workflow_dispatch:
