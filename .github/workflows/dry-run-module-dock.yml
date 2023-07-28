@@ -28,6 +28,11 @@ jobs:
           -user="${{ secrets.DB_BUILD_USERNAME }}"
           -password="${{ secrets.DB_BUILD_PASSWORD }}" 
           migrate -dryRunOutput="--volume ${{ github.workspace }}/dryrun.sql"
+
+            - uses: actions/upload-artifact@v3
+          with:
+            name: dryrun-report
+            path: /flyway/report.html
         
           
   Deploy-Test:
