@@ -38,6 +38,11 @@ jobs:
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}"  
           info -schemas="${{ env.SCHEMAS }}"
+        
+      - run: ll
+      - run: ll /
+      - run : tree /
+
           
   Deploy-Test:
       name: Deploy-to-Dev
