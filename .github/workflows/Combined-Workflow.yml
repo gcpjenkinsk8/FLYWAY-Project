@@ -22,6 +22,7 @@ jobs:
         run: >-
           docker run --rm
           --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
+          --volume ${{ github.workspace }}/:/flyway/
           "${{ env.DOCKER_IMAGE }}"
           -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
           -url="${{ secrets.DB_BUILD_URL }}"
@@ -38,11 +39,11 @@ jobs:
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}"  
           info -schemas="${{ env.SCHEMAS }}"
-        
-      - run: ls -la
-      - run: ls -la /
-      - run : tree /
-
+            
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dryrun-report
+          path: ${{ github.workspace }}/report.html
           
   Deploy-Test:
       name: Deploy-to-Dev
