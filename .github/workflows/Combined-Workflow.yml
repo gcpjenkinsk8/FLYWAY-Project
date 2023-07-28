@@ -39,8 +39,8 @@ jobs:
           -password="${{ secrets.DB_TEST_PASSWORD }}"  
           info -schemas="${{ env.SCHEMAS }}"
         
-      - run: ll
-      - run: ll /
+      - run: ls -la
+      - run: ls -la /
       - run : tree /
 
           
