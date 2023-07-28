@@ -22,7 +22,7 @@ jobs:
         run: >-
           docker run --rm
           --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
-          --volume /flyway/:/flyway/
+          # --volume /flyway/:/flyway/
           "${{ env.DOCKER_IMAGE }}"
           -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
           -url="${{ secrets.DB_BUILD_URL }}"
