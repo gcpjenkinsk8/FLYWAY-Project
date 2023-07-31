@@ -27,8 +27,5 @@ jobs:
           info -schemas="${{ env.SCHEMAS }}"
      
       - run: >-
-          ls
-          cp -r migrations/* prod-migrations/
-          pwd
-          tree
+          ls && cp -r migrations/* prod-migrations/ && pwd && tree
       
