@@ -30,5 +30,6 @@ jobs:
           ls && cp -r migrations/* prod-migrations/ && pwd && tree
           
       - run: >-
-          cd /home && ls
+         --volume ${{ github.workspace }}
+          tree
       
