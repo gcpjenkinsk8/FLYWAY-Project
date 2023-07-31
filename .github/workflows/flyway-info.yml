@@ -24,12 +24,10 @@ jobs:
           -url="${{ secrets.DB_TEST_URL }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}"  
-          info -schemas="${{ env.SCHEMAS }}"
+          info -schemas="${{ env.SCHEMAS }}" && tree
      
       - run: >-
           ls && cp -r migrations/* prod-migrations/ && pwd && tree
           
-      - run: >-
-         --volume ${{ github.workspace }}
-          tree
+    
       
