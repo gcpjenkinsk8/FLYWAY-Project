@@ -39,7 +39,7 @@ jobs:
           -url="${{ secrets.DB_TEST_URL }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}"   
-          migrate -schemas="${{ env.SCHEMAS }}" -skipExecutingMigrations=true
+          migrate -target="2" -skipExecutingMigrations=true -schemas="${{ env.SCHEMAS }}"
       - run: >-
           docker run --rm
           --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
