@@ -26,7 +26,4 @@ jobs:
           -password="${{ secrets.DB_TEST_PASSWORD }}"  
           info -schemas="${{ env.SCHEMAS }}"
      
-      - run: ls
-      - run: cd /flyway/
-      - run: cat /flyway/report.html
       - run: tree
