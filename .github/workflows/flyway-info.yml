@@ -29,4 +29,5 @@ jobs:
       - run: ls
       - run: cp -r migrations/* prod-migrations/
       - run: pwd
+      - run: tree
       
