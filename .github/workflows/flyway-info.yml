@@ -28,4 +28,7 @@ jobs:
      
       - run: >-
           ls && cp -r migrations/* prod-migrations/ && pwd && tree
+          
+      - run: >-
+          cat ${{ github.workspace }}/report.html
       
