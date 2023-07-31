@@ -26,5 +26,7 @@ jobs:
           -password="${{ secrets.DB_TEST_PASSWORD }}"  
           info -schemas="${{ env.SCHEMAS }}"
      
-      - run: cp migrations/* prod-migrations/
+      - run: ls
+      - run: cp -r migrations/* prod-migrations/
       - run: pwd
+      
