@@ -1,4 +1,4 @@
-CREATE TABLE v6 (
+CREATE TABLE v7 (
     id INT PRIMARY KEY,
     name VARCHAR(50),
     age INT,
