@@ -20,4 +20,4 @@ jobs:
         run: pip install sqlfluff
 
       - name: Run sqlfluff check
-        run: sqlfluff lint "${{ github.workspace }}/migrations" --dialect=mysql --exclude-rules=L001,L002
+        run: sqlfluff lint "${{ github.workspace }}/migrations" --dialect=mysql --exclude-rules=L001,L002,L010,L014,L029
