@@ -2,6 +2,10 @@ name: 'Dry Run Module'
  
 on:
  workflow_dispatch:
+   inputs:
+       SchemaName:
+        description: 'Schema Name'     
+        required: true
       
 env:
     SQLFLUFF_DIALECT: mysql
