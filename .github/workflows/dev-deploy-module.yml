@@ -41,7 +41,7 @@ jobs:
           --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
           "${{ env.DOCKER_IMAGE }}"
           -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
-          -url="${{ secrets.DB_TEST_URL }}"
+          -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}"   
           migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
