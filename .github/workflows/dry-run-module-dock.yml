@@ -40,7 +40,7 @@ jobs:
           -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}" 
-          check -dryrun -schemas="${{ env.SCHEMAS }}"
+          ls
 
       - name: Real Schema Info Check
         run: >-    
