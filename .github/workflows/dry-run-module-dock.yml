@@ -10,8 +10,7 @@ on:
 env:
     SQLFLUFF_DIALECT: mysql
     DOCKER_IMAGE: redgate/flyway
-    SCHEMAS: devdb
-    SCHEMAS1: proddb
+    SCHEMAS: '${{ github.event.inputs.SchemaName }}'
  
 jobs:
   Dry-run-Job:
@@ -32,13 +31,7 @@ jobs:
           -user="${{ secrets.DB_BUILD_USERNAME }}"
           -password="${{ secrets.DB_BUILD_PASSWORD }}" 
           migrate -dryRunOutput="--volume ${{ github.workspace }}/dryrun.sql"
-
-            - uses: actions/upload-artifact@v3
-          with:
-            name: dryrun-report
-            path: /flyway/report.html
-        
-          
+           
   Deploy-Test:
       name: Real Schema Info Check
       runs-on: ubuntu-20.04
