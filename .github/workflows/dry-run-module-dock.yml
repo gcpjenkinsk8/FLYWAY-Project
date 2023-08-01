@@ -27,7 +27,7 @@ jobs:
           --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
           "${{ env.DOCKER_IMAGE }}"
           -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
-          -url="${{ secrets.DB_BUILD_URL }}"/"${{ env.SCHEMAS }}"
+          -url="${{ secrets.DB_TEST_URL }}""/"${{ env.SCHEMAS }}"
           -user="${{ secrets.DB_BUILD_USERNAME }}"
           -password="${{ secrets.DB_BUILD_PASSWORD }}" 
           migrate -dryRunOutput="--volume ${{ github.workspace }}/dryrun.sql"
@@ -44,7 +44,7 @@ jobs:
           --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
           "${{ env.DOCKER_IMAGE }}"
           -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
-          -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
+          -url="${{ secrets.DB_TEST_URL }}""/"${{ env.SCHEMAS }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}"  
           info -dryRunSql
