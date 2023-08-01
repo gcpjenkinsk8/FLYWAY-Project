@@ -6,12 +6,15 @@ on:
        SchemaName:
         description: 'Schema Name'     
         required: true
-      
+       MigrationFolder:
+        description: 'Migration Folder Path'     
+        required: true
 env:
     SQLFLUFF_DIALECT: mysql
     DOCKER_IMAGE: redgate/flyway
     SCHEMAS: '${{ github.event.inputs.SchemaName }}'
- 
+    MigrationPath: '${{ github.event.inputs.MigrationFolder }}'
+    
 jobs:
   Dry-run-Job:
     name: Dry Run / Syntax Checking
@@ -24,7 +27,7 @@ jobs:
       - name: Dry Run Job Execution
         run: >-
           docker run --rm
-          --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
+          --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
           "${{ env.DOCKER_IMAGE }}"
           -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
           -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
