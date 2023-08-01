@@ -1,13 +1,13 @@
 name: 'Flyway Dev Deploy Module'
  
-#on:
-# workflow_dispatch: 
 on:
-  workflow_run:
-    workflows:
-      - Dry Run Module
-    types:
-      - completed
+# workflow_dispatch: 
+#on:
+ # workflow_run:
+  #  workflows:
+   #   - Dry Run Module
+    #types:
+     # - completed
       
   workflow_dispatch:       
    inputs:
