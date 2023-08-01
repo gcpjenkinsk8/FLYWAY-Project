@@ -44,7 +44,7 @@ jobs:
           -url="${{ secrets.DB_TEST_URL }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}"   
-          migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
+          migrate -schemas='${{ github.event.inputs.SchemaName }}' -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
       - run: >-
           docker run --rm
           --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
