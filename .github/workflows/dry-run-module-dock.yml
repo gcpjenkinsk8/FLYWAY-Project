@@ -28,8 +28,8 @@ jobs:
           "${{ env.DOCKER_IMAGE }}"
           -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
           -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
-          -user="${{ secrets.DB_BUILD_USERNAME }}"
-          -password="${{ secrets.DB_BUILD_PASSWORD }}" 
+          -user="${{ secrets.DB_TEST_USERNAME }}"
+          -password="${{ secrets.DB_TEST_PASSWORD }}" 
           migrate -dryRunOutput="--volume ${{ github.workspace }}/dryrun.sql"
            
   Deploy-Test:
@@ -46,7 +46,7 @@ jobs:
           -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
           -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
-          -password="${{ secrets.DB_TEST_PASSWORD }}"  
+          -password="${{ secrets.DB_TEST_PASSWORD }}" 
           info -dryRunSql
 
 
