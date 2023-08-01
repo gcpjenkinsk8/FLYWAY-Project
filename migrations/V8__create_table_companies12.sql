@@ -1,4 +1,4 @@
-CREATE TABLE Companies123 (
+CREATE TABLE Companies12 (
   id int,
   name varchar(50),
   address text,
