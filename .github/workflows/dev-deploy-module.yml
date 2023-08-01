@@ -34,7 +34,7 @@ jobs:
           -url="${{ secrets.DB_TEST_URL }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}"  
-          info -schemas="${{ env.SCHEMAS }}"
+          info -schemas='${{ github.event.inputs.SchemaName }}'
    
       - run: >-
           docker run --rm
@@ -53,6 +53,6 @@ jobs:
           -url="${{ secrets.DB_TEST_URL }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}"   
-          info -schemas="${{ env.SCHEMAS }}"
+          info -schemas='${{ github.event.inputs.SchemaName }}'
 
 
