@@ -38,7 +38,7 @@ jobs:
       - name: Real Schema Info Check
         run: >-    
           docker run --rm
-          --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
+          --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
           "${{ env.DOCKER_IMAGE }}"
           -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
           -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
