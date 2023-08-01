@@ -35,6 +35,7 @@ jobs:
   Deploy-Test:
       name: Real Schema Info Check
       runs-on: ubuntu-20.04
+      needs: Dry-run-Job
       steps:
       - uses: actions/checkout@v3.0.0
       
