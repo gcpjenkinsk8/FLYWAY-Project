@@ -33,14 +33,7 @@ jobs:
           migrate -dryRunOutput="--volume ${{ github.workspace }}/dryrun.sql" -validateOnMigrate=true
           
           run: >-
-          docker run --rm
-          --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
-          "${{ env.DOCKER_IMAGE }}"
-          -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
-          -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
-          -user="${{ secrets.DB_TEST_USERNAME }}"
-          -password="${{ secrets.DB_TEST_PASSWORD }}" 
-          ls
+           ls
 
       - name: Real Schema Info Check
         run: >-    
