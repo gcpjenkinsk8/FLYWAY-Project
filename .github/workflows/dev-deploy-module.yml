@@ -2,6 +2,10 @@ name: 'Flyway Dev Deploy Module'
  
 on:
  workflow_dispatch: 
+  inputs:
+       SchemaName:
+        description: 'Schema Name'     
+        required: true
 #on:
 #  workflow_run:
 #    workflows:
@@ -11,7 +15,7 @@ on:
       
 env:
     DOCKER_IMAGE: redgate/flyway
-    SCHEMAS: devdb
+    SCHEMAS: '${{ github.event.inputs.SchemaName }}'
  
 jobs:
           
