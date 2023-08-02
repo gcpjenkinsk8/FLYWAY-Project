@@ -68,9 +68,6 @@ jobs:
             -user="${{ secrets.DB_TEST_USERNAME }}"
             -password="${{ secrets.DB_TEST_PASSWORD }}"   
             info -schemas="${{ env.SCHEMAS }}"
-            
-      - run: >- 
-         tree .
          
       - uses: actions/upload-artifact@v3
         with:
