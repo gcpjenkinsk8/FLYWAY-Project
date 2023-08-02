@@ -46,24 +46,13 @@ jobs:
          -password="${{ secrets.DB_TEST_PASSWORD }}"  
          -reportFilename="reports/report"
          info -schemas="${{ env.SCHEMAS }}"
-   
-      - run: >-
-          docker run --rm
-          --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
-          "${{ env.DOCKER_IMAGE }}"
-          -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
-          -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
-          -user="${{ secrets.DB_TEST_USERNAME }}"
-          -password="${{ secrets.DB_TEST_PASSWORD }}"   
-          migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
-      - run: >-
-          docker run --rm
-          --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
-          "${{ env.DOCKER_IMAGE }}"
-          -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
-          -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
-          -user="${{ secrets.DB_TEST_USERNAME }}"
-          -password="${{ secrets.DB_TEST_PASSWORD }}"   
-          info -schemas="${{ env.SCHEMAS }}"
-
+      
+      - run: >- 
+         ls
+         
+         - uses: actions/upload-artifact@v3
+          with:
+            name: dryrun-report
+            path: /flyway/report.html
+     
 
