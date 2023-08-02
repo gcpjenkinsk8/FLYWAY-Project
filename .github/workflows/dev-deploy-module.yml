@@ -38,6 +38,7 @@ jobs:
       - run: >-    
           docker run --rm
           --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+          --volume ${{ github.workspace }}/reports:/flyway
           "${{ env.DOCKER_IMAGE }}"
           -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
           -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
