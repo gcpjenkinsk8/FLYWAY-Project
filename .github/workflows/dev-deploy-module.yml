@@ -59,7 +59,7 @@ jobs:
          migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
 
   Repair-Action:
-      name: Rollback Job
+      name: Repair Job
       needs: Deploy-Test
       runs-on: ubuntu-20.04
       if: failure()
