@@ -26,7 +26,7 @@ env:
 jobs:
           
   Deploy-Test:
-      name: Deploy to Dev
+      name: Deploy Module
       runs-on: ubuntu-20.04
    #   if: ${{ github.event.workflow_run.conclusion == 'success' }}
       steps:
@@ -59,34 +59,17 @@ jobs:
          migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
 
   
-         - name: Notify Failure
-          needs: Deploy-Test
-          if: failure()
-          run: >-
-            docker run --rm
-            --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
-            --volume ${{ github.workspace }}/reports:/flyway/reports
-            "${{ env.DOCKER_IMAGE }}"
-            -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
-            -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
-            -user="${{ secrets.DB_TEST_USERNAME }}"
-            -password="${{ secrets.DB_TEST_PASSWORD }}"   
-            -reportFilename="reports/report"  
-            repair -schemas="${{ env.SCHEMAS }}"
-
-            - name: Real Schema Info Check
-            if: always()
-            run: >-    
-              docker run --rm
-              --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
-              --volume ${{ github.workspace }}/reports:/flyway/reports
-              "${{ env.DOCKER_IMAGE }}"
-              -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
-              -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
-              -user="${{ secrets.DB_TEST_USERNAME }}"
-              -password="${{ secrets.DB_TEST_PASSWORD }}"   
-              -reportFilename="reports/report"
-              info -dryRunSql
+         - run: >-    
+         docker run --rm
+         --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+         --volume ${{ github.workspace }}/reports:/flyway/reports
+         "${{ env.DOCKER_IMAGE }}"
+         -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+         -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
+         -user="${{ secrets.DB_TEST_USERNAME }}"
+         -password="${{ secrets.DB_TEST_PASSWORD }}"  
+         -reportFilename="reports/report"
+         info -schemas="${{ env.SCHEMAS }}"
 
       - uses: actions/upload-artifact@v3
         if: always()
@@ -95,7 +78,7 @@ jobs:
          path: ${{ github.workspace }}/reports/report.html
      
   Repair-Action:
-         name: Rollback Job
+         name: Repair Job
          needs: Deploy-Test
          runs-on: ubuntu-20.04
          if: failure()
@@ -116,21 +99,21 @@ jobs:
             -password="${{ secrets.DB_TEST_PASSWORD }}"   
             -reportFilename="reports/report"  
             repair -schemas="${{ env.SCHEMAS }}"
-         - run: >-
-               docker run --rm
-               --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
-               --volume ${{ github.workspace }}/reports:/flyway/reports
-               "${{ env.DOCKER_IMAGE }}"
-               -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
-               -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
-               -user="${{ secrets.DB_TEST_USERNAME }}"
-               -password="${{ secrets.DB_TEST_PASSWORD }}"   
-               -reportFilename="reports/report" 
-               info -schemas="${{ env.SCHEMAS }}"
 
+         - run: >-    
+            docker run --rm
+            --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+            --volume ${{ github.workspace }}/reports:/flyway/reports
+            "${{ env.DOCKER_IMAGE }}"
+            -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+            -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
+            -user="${{ secrets.DB_TEST_USERNAME }}"
+            -password="${{ secrets.DB_TEST_PASSWORD }}"  
+            -reportFilename="reports/report"
+            info -schemas="${{ env.SCHEMAS }}"
 
-               - uses: actions/upload-artifact@v3
-               if: always()
-               with:
-                name: flyway-repair-report
-                path: ${{ github.workspace }}/reports/report.html
+         - uses: actions/upload-artifact@v3
+           if: always()
+           with:
+            name: flyway-report
+            path: ${{ github.workspace }}/reports/report.html
