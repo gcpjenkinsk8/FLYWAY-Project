@@ -94,4 +94,42 @@ jobs:
          name: flyway-report
          path: ${{ github.workspace }}/reports/report.html
      
+  Repair-Action:
+         name: Rollback Job
+         needs: Deploy-Test
+         runs-on: ubuntu-20.04
+         if: failure()
+         steps:
+         - uses: actions/checkout@v3.0.0
+         
+         - name: Notify Failure
+           run: echo "The 'build' job has failed. Taking appropriate action..."
+            
+         - run: >-
+            docker run --rm
+            --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+            --volume ${{ github.workspace }}/reports:/flyway/reports
+            "${{ env.DOCKER_IMAGE }}"
+            -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+            -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
+            -user="${{ secrets.DB_TEST_USERNAME }}"
+            -password="${{ secrets.DB_TEST_PASSWORD }}"   
+            -reportFilename="reports/report"  
+            repair -schemas="${{ env.SCHEMAS }}"
+         - run: >-
+               docker run --rm
+               --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+               --volume ${{ github.workspace }}/reports:/flyway/reports
+               "${{ env.DOCKER_IMAGE }}"
+               -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+               -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
+               -user="${{ secrets.DB_TEST_USERNAME }}"
+               -password="${{ secrets.DB_TEST_PASSWORD }}"   
+               -reportFilename="reports/report" 
+               info -schemas="${{ env.SCHEMAS }}"
 
+               - uses: actions/upload-artifact@v3
+               if: always()
+               with:
+                name: flyway-repair-report
+                path: ${{ github.workspace }}/reports/report.html
