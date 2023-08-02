@@ -53,6 +53,6 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
          name: dryrun-report
-         path: /flyway/reports/report.html
+         path: ${{ github.workspace }}/reports/report.html
      
 
