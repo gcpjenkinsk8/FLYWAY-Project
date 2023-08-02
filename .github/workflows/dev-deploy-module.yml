@@ -48,11 +48,11 @@ jobs:
          info -schemas="${{ env.SCHEMAS }}"
       
       - run: >- 
-         ls
+         tree .
          
-         - uses: actions/upload-artifact@v3
-          with:
-            name: dryrun-report
-            path: /flyway/report.html
+      - uses: actions/upload-artifact@v3
+        with:
+         name: dryrun-report
+         path: /flyway/reports/report.html
      
 
