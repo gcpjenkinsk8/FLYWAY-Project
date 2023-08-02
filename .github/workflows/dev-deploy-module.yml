@@ -58,8 +58,7 @@ jobs:
          -reportFilename="reports/report"
          migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
 
- 
-   Rollback-Action:
+  Rollback-Action:
       name: Rollback Job
       needs: Deploy-Test
       runs-on: ubuntu-20.04
