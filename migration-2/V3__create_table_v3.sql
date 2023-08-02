@@ -1,7 +1,5 @@
-CREATE TfdABLE v3 (
-    id INT PRIMARY KEY,
-    name VARCHAR(50),
-    age INT,
-    email VARCHAR(100)
-);
-fvdfcvx
+DELIMITER // 
+CREATE PROCEDURE proc1() AUTHORIZE AS 
+BEGIN 
+ECHO SELECT CURRENT_USER(); 
+END;//
