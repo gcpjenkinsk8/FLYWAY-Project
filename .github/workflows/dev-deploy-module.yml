@@ -36,14 +36,15 @@ jobs:
       - run: >- 
          ls
       - run: >-    
-          docker run --rm
+         docker run --rm
           --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
-          --volume ${{ github.workspace }}/reports:/flyway
+          --volume ${{ github.workspace }}/reports:/flyway/reports
           "${{ env.DOCKER_IMAGE }}"
           -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
           -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}"  
+          --reportFilename="reports/report"
           info -schemas="${{ env.SCHEMAS }}"
    
       - run: >-
