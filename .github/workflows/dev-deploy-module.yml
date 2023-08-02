@@ -58,18 +58,40 @@ jobs:
          -reportFilename="reports/report"
          migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
 
-      - run: >-
-         docker run --rm
-         --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
-         --volume ${{ github.workspace }}/reports:/flyway/reports
-         "${{ env.DOCKER_IMAGE }}"
-         -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
-         -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
-         -user="${{ secrets.DB_TEST_USERNAME }}"
-         -password="${{ secrets.DB_TEST_PASSWORD }}"  
-         -reportFilename="reports/report"
-         info -schemas="${{ env.SCHEMAS }}"
+ 
+   Rollback-Action:
+      name: Rollback Job
+      needs: Deploy-Test
+      runs-on: ubuntu-20.04
+      if: failure()
+      steps:
+      - uses: actions/checkout@v3.0.0
+      
+      - name: Notify Failure
+        run: echo "The 'build' job has failed. Taking appropriate action..."
          
+      - run: >-
+            docker run --rm
+            --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
+            "${{ env.DOCKER_IMAGE }}"
+            -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+            -url="${{ secrets.DB_TEST_URL }}"
+            -user="${{ secrets.DB_TEST_USERNAME }}"
+            -password="${{ secrets.DB_TEST_PASSWORD }}"   
+            repair -schemas="${{ env.SCHEMAS }}"
+
+            - name: Real Schema Info Check
+            if: always()
+            run: >-    
+              docker run --rm
+              --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+              "${{ env.DOCKER_IMAGE }}"
+              -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+              -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
+              -user="${{ secrets.DB_TEST_USERNAME }}"
+              -password="${{ secrets.DB_TEST_PASSWORD }}" 
+              info -dryRunSql
+
       - uses: actions/upload-artifact@v3
         if: always()
         with:
