@@ -1,4 +1,4 @@
-name: 'Flyway Deploy Module'
+name: 'Flyway Migration Module'
  
 on:
 # workflow_dispatch: 
