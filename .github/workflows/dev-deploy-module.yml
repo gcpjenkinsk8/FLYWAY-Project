@@ -69,7 +69,8 @@ jobs:
          -password="${{ secrets.DB_TEST_PASSWORD }}"  
          -reportFilename="reports/report"
          info -schemas="${{ env.SCHEMAS }}"
-         
+       
+       if: always()  
       - uses: actions/upload-artifact@v3
         with:
          name: flyway-report
