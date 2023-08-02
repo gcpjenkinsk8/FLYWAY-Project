@@ -44,7 +44,7 @@ jobs:
           -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}"  
-          --reportFilename="reports/report"
+          -reportFilename="reports/report"
           info -schemas="${{ env.SCHEMAS }}"
    
       - run: >-
