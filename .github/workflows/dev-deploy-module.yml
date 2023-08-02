@@ -59,7 +59,7 @@ jobs:
          migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
 
   
-         - run: >-    
+      - run: >-    
          docker run --rm
          --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
          --volume ${{ github.workspace }}/reports:/flyway/reports
