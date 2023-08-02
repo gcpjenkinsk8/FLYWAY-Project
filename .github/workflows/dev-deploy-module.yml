@@ -60,14 +60,16 @@ jobs:
          migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
 
       - run: >-
-            docker run --rm
-            --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
-            "${{ env.DOCKER_IMAGE }}"
-            -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
-            -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
-            -user="${{ secrets.DB_TEST_USERNAME }}"
-            -password="${{ secrets.DB_TEST_PASSWORD }}"   
-            info -schemas="${{ env.SCHEMAS }}"
+         docker run --rm
+         --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+         --volume ${{ github.workspace }}/reports:/flyway/reports
+         "${{ env.DOCKER_IMAGE }}"
+         -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+         -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
+         -user="${{ secrets.DB_TEST_USERNAME }}"
+         -password="${{ secrets.DB_TEST_PASSWORD }}"  
+         -reportFilename="reports/report"
+         info -schemas="${{ env.SCHEMAS }}"
          
       - uses: actions/upload-artifact@v3
         with:
