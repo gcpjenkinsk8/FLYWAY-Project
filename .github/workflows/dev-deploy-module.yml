@@ -31,7 +31,10 @@ jobs:
    #   if: ${{ github.event.workflow_run.conclusion == 'success' }}
       steps:
       - uses: actions/checkout@v3.0.0
-      
+      - run: >- 
+         mkdir -p ${{ github.workspace }}/reports
+      - run: >- 
+         ls
       - run: >-    
           docker run --rm
           --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
