@@ -17,7 +17,7 @@ env:
     
 jobs:
   Dry-run-Job:
-    name: Dry Run / Syntax Checking
+    name: Flyway Dry Run Check
     runs-on: ubuntu-20.04
  
     steps:
