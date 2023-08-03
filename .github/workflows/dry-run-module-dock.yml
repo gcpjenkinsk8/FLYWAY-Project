@@ -39,6 +39,8 @@ jobs:
           -validateOnMigrate=true
           migrate -dryRunOutput=/home/runner/work/FLYWAY-TEST/FLYWAY-TEST/reports/dryrun.sql
 
+      - run: >-
+          ls
 
       - uses: actions/upload-artifact@v3
         if: always()
