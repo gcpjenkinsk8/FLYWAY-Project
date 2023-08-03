@@ -3,15 +3,17 @@ name: 'Flyway GitHub Dev Rollback'
 on: 
   workflow_dispatch:
     inputs:
-       UndoVersion:
-        description: 'Undo Version'     
-        required: true
+      SchemaName:
+       description: 'Schema Name'     
+       required: true
+      MigrationFolder:
+       description: 'Migration Folder Path'     
+       required: true
  
 env:
     DOCKER_IMAGE: redgate/flyway
-    SCHEMAS: devdb
-    SCHEMAS1: proddb
-   
+    SCHEMAS: '${{ github.event.inputs.SchemaName }}'
+    MigrationPath: '${{ github.event.inputs.MigrationFolder }}'
  
 jobs:
  Failed-Action:
@@ -24,30 +26,44 @@ jobs:
         run: echo "The 'build' job has failed. Taking appropriate action..."
         
       - run: >-
-          docker run --rm
-          --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
-          "${{ env.DOCKER_IMAGE }}"
-          -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
-          -url="${{ secrets.DB_TEST_URL }}"
-          -user="${{ secrets.DB_TEST_USERNAME }}"
-          -password="${{ secrets.DB_TEST_PASSWORD }}"   
+         docker run --rm
+         --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+         --volume ${{ github.workspace }}/reports:/flyway/reports
+         "${{ env.DOCKER_IMAGE }}"
+         -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+         -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
+         -user="${{ secrets.DB_TEST_USERNAME }}"
+         -password="${{ secrets.DB_TEST_PASSWORD }}"  
+         -reportFilename="reports/report"   
           repair -schemas="${{ env.SCHEMAS }}"
           
       - run: >-
           docker run --rm
-          --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
+          --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+          --volume ${{ github.workspace }}/reports:/flyway/reports
           "${{ env.DOCKER_IMAGE }}"
           -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
-          -url="${{ secrets.DB_TEST_URL }}"
+          -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
-          -password="${{ secrets.DB_TEST_PASSWORD }}"   
+          -password="${{ secrets.DB_TEST_PASSWORD }}"  
+          -reportFilename="reports/report"
           undo -target='${{ github.event.inputs.UndoVersion }}' -schemas="${{ env.SCHEMAS }}"
+
       - run: >-
           docker run --rm
-          --volume ${{ github.workspace }}/migrations:/flyway/sql:ro
+          --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+          --volume ${{ github.workspace }}/reports:/flyway/reports
           "${{ env.DOCKER_IMAGE }}"
           -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
-          -url="${{ secrets.DB_TEST_URL }}"
+          -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
-          -password="${{ secrets.DB_TEST_PASSWORD }}"   
+          -password="${{ secrets.DB_TEST_PASSWORD }}"  
+          -reportFilename="reports/report"  
           info -schemas="${{ env.SCHEMAS }}"
+
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+           name: flyway-rollback-report
+           path: ${{ github.workspace }}/reports/report.html
