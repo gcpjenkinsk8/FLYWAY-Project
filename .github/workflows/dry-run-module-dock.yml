@@ -36,24 +36,11 @@ jobs:
           -password="${{ secrets.DB_TEST_PASSWORD }}" 
           -reportFilename="reports/report"
           -sqlMigrationSuffixes="sql,ddl"
-          migrate -dryRunOutput="--volume ${{ github.workspace }}/dryrun.sql" -validateOnMigrate=true
-                  
-      - name: Real Schema Info Check
-        run: >-    
-          docker run --rm
-          --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
-          --volume ${{ github.workspace }}/reports:/flyway/reports
-          "${{ env.DOCKER_IMAGE }}"
-          -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
-          -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
-          -user="${{ secrets.DB_TEST_USERNAME }}"
-          -password="${{ secrets.DB_TEST_PASSWORD }}" 
-          -reportFilename="reports/report"
-          -sqlMigrationSuffixes="sql,ddl"
-          info -dryRunSql
+          migrate -dryRunOutput="--volume ${{ github.workspace }}/reports/dryrun.sql" -validateOnMigrate=true
+
 
       - uses: actions/upload-artifact@v3
         if: always()
         with:
            name: flyway-dryRun-report
-           path: ${{ github.workspace }}/reports/report.html
+           path: ${{ github.workspace }}/reports/dryrun.sql
