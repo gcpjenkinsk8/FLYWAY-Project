@@ -42,6 +42,7 @@ jobs:
          -user="${{ secrets.DB_TEST_USERNAME }}"
          -password="${{ secrets.DB_TEST_PASSWORD }}"  
          -reportFilename="reports/report"
+         -sqlMigrationSuffixes="sql,ddl"
          info -schemas="${{ env.SCHEMAS }}"
 
       - run: >-
@@ -68,6 +69,7 @@ jobs:
          -user="${{ secrets.DB_TEST_USERNAME }}"
          -password="${{ secrets.DB_TEST_PASSWORD }}"  
          -reportFilename="reports/report"
+         -sqlMigrationSuffixes="sql,ddl"
          info -schemas="${{ env.SCHEMAS }}"
 
       - uses: actions/upload-artifact@v3
@@ -97,6 +99,7 @@ jobs:
             -user="${{ secrets.DB_TEST_USERNAME }}"
             -password="${{ secrets.DB_TEST_PASSWORD }}"   
             -reportFilename="reports/report"  
+            -sqlMigrationSuffixes="sql,ddl"
             repair -schemas="${{ env.SCHEMAS }}"
 
          - run: >-    
@@ -109,6 +112,7 @@ jobs:
             -user="${{ secrets.DB_TEST_USERNAME }}"
             -password="${{ secrets.DB_TEST_PASSWORD }}"  
             -reportFilename="reports/report"
+            -sqlMigrationSuffixes="sql,ddl"
             info -schemas="${{ env.SCHEMAS }}"
 
          - uses: actions/upload-artifact@v3
