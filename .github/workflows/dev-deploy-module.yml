@@ -54,6 +54,7 @@ jobs:
          -user="${{ secrets.DB_TEST_USERNAME }}"
          -password="${{ secrets.DB_TEST_PASSWORD }}"   
          -reportFilename="reports/report"
+         -sqlMigrationSuffixes="sql,ddl"
          migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
 
   
