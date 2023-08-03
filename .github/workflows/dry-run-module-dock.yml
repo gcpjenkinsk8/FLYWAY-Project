@@ -40,7 +40,7 @@ jobs:
           migrate -dryRunOutput=/home/runner/work/FLYWAY-TEST/FLYWAY-TEST/reports/dryrun.sql
 
       - run: >-
-          ls
+          tree
 
       - uses: actions/upload-artifact@v3
         if: always()
