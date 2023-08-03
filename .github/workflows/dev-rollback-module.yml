@@ -9,11 +9,15 @@ on:
       MigrationFolder:
        description: 'Migration Folder Path'     
        required: true
+      UndoVersion:
+        description: 'Undo Version'     
+        required: true
  
 env:
     DOCKER_IMAGE: redgate/flyway
     SCHEMAS: '${{ github.event.inputs.SchemaName }}'
     MigrationPath: '${{ github.event.inputs.MigrationFolder }}'
+    UndoVersion: '${{ github.event.inputs.UndoVersion }}'
  
 jobs:
  Failed-Action:
@@ -47,7 +51,7 @@ jobs:
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}"  
           -reportFilename="reports/report"
-          undo -target='${{ github.event.inputs.UndoVersion }}' -schemas="${{ env.SCHEMAS }}"
+          undo -target="${{ env.UndoVersion }}" -schemas="${{ env.SCHEMAS }}"
 
       - run: >-
           docker run --rm
