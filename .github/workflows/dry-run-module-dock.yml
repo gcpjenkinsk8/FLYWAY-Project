@@ -36,11 +36,22 @@ jobs:
           -password="${{ secrets.DB_TEST_PASSWORD }}" 
           -reportFilename="reports/report"
           -sqlMigrationSuffixes="sql,ddl"
-          -validateOnMigrate=true
-          migrate -dryRunOutput=/flyway/reports/dryrun.sql
+          migrate -dryRunOutput=/flyway/reports/dryrun.sql -validateOnMigrate=true
 
-      - run: >-
-          tree
+                  
+      - name: Flyway Info Check
+        run: >-    
+            docker run --rm
+            --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+            --volume ${{ github.workspace }}/reports:/flyway/reports
+            "${{ env.DOCKER_IMAGE }}"
+            -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+            -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
+            -user="${{ secrets.DB_TEST_USERNAME }}"
+            -password="${{ secrets.DB_TEST_PASSWORD }}" 
+            -reportFilename="reports/report"
+            -sqlMigrationSuffixes="sql,ddl"
+            info -dryRunSql
 
       - uses: actions/upload-artifact@v3
         if: always()
