@@ -36,7 +36,8 @@ jobs:
           -password="${{ secrets.DB_TEST_PASSWORD }}" 
           -reportFilename="reports/report"
           -sqlMigrationSuffixes="sql,ddl"
-          migrate -dryRunOutput="--volume ${{ github.workspace }}/reports/dryrun.sql" -validateOnMigrate=true
+          -validateOnMigrate=true
+          migrate -dryRunOutput=/home/runner/work/FLYWAY-TEST/FLYWAY-TEST/reports/dryrun.sql
 
 
       - uses: actions/upload-artifact@v3
