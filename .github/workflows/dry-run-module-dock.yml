@@ -36,7 +36,7 @@ jobs:
           -password="${{ secrets.DB_TEST_PASSWORD }}" 
           -reportFilename="reports/report"
           -sqlMigrationSuffixes="sql,ddl"
-          migrate -dryRunOutput=/flyway/reports/dryrun.sql -validateOnMigrate=true
+          migrate -dryRunOutput=/flyway/reports/report.html -validateOnMigrate=true
 
                   
       - name: Flyway Info Check
