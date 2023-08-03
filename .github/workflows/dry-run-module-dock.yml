@@ -33,6 +33,7 @@ jobs:
           -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}" 
+          -sqlMigrationSuffixes="sql,ddl"
           migrate -dryRunOutput="--volume ${{ github.workspace }}/dryrun.sql" -validateOnMigrate=true
                   
       - name: Real Schema Info Check
@@ -44,6 +45,7 @@ jobs:
           -url="${{ secrets.DB_TEST_URL }}"/"${{ env.SCHEMAS }}"
           -user="${{ secrets.DB_TEST_USERNAME }}"
           -password="${{ secrets.DB_TEST_PASSWORD }}" 
+          -sqlMigrationSuffixes="sql,ddl"
           info -dryRunSql
 
 
