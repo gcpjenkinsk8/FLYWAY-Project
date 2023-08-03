@@ -1,4 +1,4 @@
-CREATE TABLE v4 (
+CREATE TABLE v4TAB (
     id INT PRIMARY KEY,
     name VARCHAR(50),
     age INT,
