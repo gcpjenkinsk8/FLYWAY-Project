@@ -46,4 +46,4 @@ jobs:
         if: always()
         with:
            name: flyway-dryRun-report
-           path: ${{ github.workspace }}/reports/dryrun.sql
+           path: ${{ github.workspace }}/reports/
