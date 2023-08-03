@@ -39,7 +39,7 @@ jobs:
          -user="${{ secrets.DB_TEST_USERNAME }}"
          -password="${{ secrets.DB_TEST_PASSWORD }}"  
          -reportFilename="reports/report"   
-          repair -schemas="${{ env.SCHEMAS }}"
+         repair -schemas="${{ env.SCHEMAS }}"
           
       - run: >-
           docker run --rm
