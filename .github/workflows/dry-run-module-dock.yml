@@ -37,7 +37,7 @@ jobs:
           -reportFilename="reports/report"
           -sqlMigrationSuffixes="sql,ddl"
           -validateOnMigrate=true
-          migrate -dryRunOutput=/home/runner/work/FLYWAY-TEST/FLYWAY-TEST/reports/dryrun.sql
+          migrate -dryRunOutput=/flyway/reports/dryrun.sql
 
       - run: >-
           tree
