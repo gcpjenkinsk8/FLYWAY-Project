@@ -1,1 +1,1 @@
-CREATE SCHEMA new_schemaX;
+CREATE SCHEMA if not exists new_schemaX;
