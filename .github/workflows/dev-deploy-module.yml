@@ -32,6 +32,7 @@ jobs:
       steps:
       - uses: actions/checkout@v3.0.0
 
+
       - run: >-    
          docker run --rm
          --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
@@ -58,8 +59,7 @@ jobs:
          -sqlMigrationSuffixes="sql,ddl"
          migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
 
-   -needs: Deploy-Test
-   if: always()
+  
       - run: >-    
          docker run --rm
          --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
