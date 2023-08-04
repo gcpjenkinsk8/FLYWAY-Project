@@ -13,7 +13,7 @@ on:
    inputs:
        SchemaName:
         description: 'Schema Name'     
-        required: false
+        required: true
        MigrationFolder:
         description: 'Migration Folder Path'     
         required: true
@@ -58,7 +58,8 @@ jobs:
          -sqlMigrationSuffixes="sql,ddl"
          migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
 
-  
+   -needs: Deploy-Test
+   if: always()
       - run: >-    
          docker run --rm
          --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro

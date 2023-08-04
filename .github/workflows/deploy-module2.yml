@@ -1,0 +1,123 @@
+name: 'Flyway Migration Module'
+ 
+on:
+# workflow_dispatch: 
+#on:
+ # workflow_run:
+  #  workflows:
+   #   - Dry Run Module
+    #types:
+     # - completed
+      
+  workflow_dispatch:       
+   inputs:
+       SchemaName:
+        description: 'Schema Name'     
+        required: true
+       MigrationFolder:
+        description: 'Migration Folder Path'     
+        required: true
+    
+env:
+    DOCKER_IMAGE: redgate/flyway
+    SCHEMAS: '${{ github.event.inputs.SchemaName }}'
+    MigrationPath: '${{ github.event.inputs.MigrationFolder }}'
+ 
+jobs:
+          
+  Deploy-Test:
+      name: Deploy Module
+      runs-on: ubuntu-20.04
+   #   if: ${{ github.event.workflow_run.conclusion == 'success' }}
+      steps:
+      - uses: actions/checkout@v3.0.0
+
+      - run: >-    
+         docker run --rm
+         --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+         --volume ${{ github.workspace }}/reports:/flyway/reports
+         "${{ env.DOCKER_IMAGE }}"
+         -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+         -url="${{ secrets.DB_BUILD_URL }}"
+         -user="${{ secrets.DB_TEST_USERNAME }}"
+         -password="${{ secrets.DB_TEST_PASSWORD }}"  
+         -reportFilename="reports/report"
+         -sqlMigrationSuffixes="sql,ddl"
+         info -schemas="${{ env.SCHEMAS }}"
+
+      - run: >-
+         docker run --rm
+         --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+         --volume ${{ github.workspace }}/reports:/flyway/reports
+         "${{ env.DOCKER_IMAGE }}"
+         -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+         -url="${{ secrets.DB_BUILD_URL }}"
+         -user="${{ secrets.DB_TEST_USERNAME }}"
+         -password="${{ secrets.DB_TEST_PASSWORD }}"   
+         -reportFilename="reports/report"
+         -sqlMigrationSuffixes="sql,ddl"
+         migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
+
+   -needs: Deploy-Test
+   if: always()
+      - run: >-    
+         docker run --rm
+         --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+         --volume ${{ github.workspace }}/reports:/flyway/reports
+         "${{ env.DOCKER_IMAGE }}"
+         -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+         -url="${{ secrets.DB_BUILD_URL }}"
+         -user="${{ secrets.DB_TEST_USERNAME }}"
+         -password="${{ secrets.DB_TEST_PASSWORD }}"  
+         -reportFilename="reports/report"
+         -sqlMigrationSuffixes="sql,ddl"
+         info -schemas="${{ env.SCHEMAS }}"
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+         name: flyway-report
+         path: ${{ github.workspace }}/reports/report.html
+     
+  Repair-Action:
+         name: Repair Job
+         needs: Deploy-Test
+         runs-on: ubuntu-20.04
+         if: failure()
+         steps:
+         - uses: actions/checkout@v3.0.0
+         
+         - name: Notify Failure
+           run: echo "The 'build' job has failed. Taking appropriate action..."
+            
+         - run: >-
+            docker run --rm
+            --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+            --volume ${{ github.workspace }}/reports:/flyway/reports
+            "${{ env.DOCKER_IMAGE }}"
+            -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+            -url="${{ secrets.DB_BUILD_URL }}"
+            -user="${{ secrets.DB_TEST_USERNAME }}"
+            -password="${{ secrets.DB_TEST_PASSWORD }}"   
+            -reportFilename="reports/report"  
+            -sqlMigrationSuffixes="sql,ddl"
+            repair -schemas="${{ env.SCHEMAS }}"
+
+         - run: >-    
+            docker run --rm
+            --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+            --volume ${{ github.workspace }}/reports:/flyway/reports
+            "${{ env.DOCKER_IMAGE }}"
+            -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+            -url="${{ secrets.DB_BUILD_URL }}"
+            -user="${{ secrets.DB_TEST_USERNAME }}"
+            -password="${{ secrets.DB_TEST_PASSWORD }}"  
+            -reportFilename="reports/report"
+            -sqlMigrationSuffixes="sql,ddl"
+            info -schemas="${{ env.SCHEMAS }}"
+
+         - uses: actions/upload-artifact@v3
+           if: always()
+           with:
+            name: flyway-repair-report
+            path: ${{ github.workspace }}/reports/report.html
