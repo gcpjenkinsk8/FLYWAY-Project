@@ -1,1 +1,1 @@
-DROP DATABASE rawBlockchain_DEV;
+DROP DATABASE if not exists rawBlockchain_DEV;
