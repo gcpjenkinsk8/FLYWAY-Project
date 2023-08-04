@@ -1,1 +1,1 @@
-DROP TABLE v1;
+DROP DATABASE rawBlockchain_DEV;
