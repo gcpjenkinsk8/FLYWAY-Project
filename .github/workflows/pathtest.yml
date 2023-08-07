@@ -1,4 +1,4 @@
-name: 'Path Test'
+name: 'Path Deploy'
  
 on:
 # workflow_dispatch: 
@@ -39,8 +39,8 @@ jobs:
             ls
 
             # Extract the value from the text file (replace with your extraction command)
-            schema_value=$(grep "SCHEMA:" dar-mig/migration-config.txt | cut -d " " -f 2-)
-            migpath_value=$(grep "MigrationPath:" dar-mig/migration-config.txt | cut -d " " -f 2-)
+            schema_value=$(grep "SCHEMA:" migrations/dev/Blockchain_Dev/migration-config.txt | cut -d " " -f 2-)
+            migpath_value=$(grep "MigrationPath:" migrations/dev/Blockchain_Dev/migration-config.txt | cut -d " " -f 2-)
             echo "Extracted Value: $schema_value"
             echo "Migration Path Value: $migpath_value"
             
@@ -62,24 +62,24 @@ jobs:
       steps:
       - uses: actions/checkout@v3.0.0
      
-      - run: >-   
-         docker run --rm
-         "${{ env.DOCKER_IMAGE }}"
-         ls
-      - run: >-   
-         docker run --rm
-         "${{ env.DOCKER_IMAGE }}"
-         tree
+      # - run: >-   
+      #    docker run --rm
+      #    "${{ env.DOCKER_IMAGE }}"
+      #    ls
+      # - run: >-   
+      #    docker run --rm
+      #    "${{ env.DOCKER_IMAGE }}"
+      #    tree
 
-      - run: >-   
-         docker run --rm
-         "${{ env.DOCKER_IMAGE }}"
-         --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
-         schema_value1=$(grep "SCHEMA:" ${{ github.workspace }}/"${{ env.MigrationPath }}"/migration-config.txt | cut -d " " -f 2-) 
+      # - run: >-   
+      #    docker run --rm
+      #    "${{ env.DOCKER_IMAGE }}"
+      #    --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+      #    schema_value1=$(grep "SCHEMA:" ${{ github.workspace }}/"${{ env.MigrationPath }}"/migration-config.txt | cut -d " " -f 2-) 
 
-      - run: >-  
-         docker run --rm
-         echo "SchemaValue1=$schema_value1" >> $GITHUB_ENV
+      # - run: >-  
+      #    docker run --rm
+      #    echo "SchemaValue1=$schema_value1" >> $GITHUB_ENV
       - run: >-    
          docker run --rm
          --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
