@@ -33,7 +33,7 @@ jobs:
       - uses: actions/checkout@v3.0.0
 
       - run: >-   
-         ls
+         Sname=$(grep "SCHEMA:" /dar-mig/migration-config.txt | cut -d " " -f 2-)
       - run: >-    
          docker run --rm
          --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
@@ -59,7 +59,7 @@ jobs:
          -reportFilename="reports/report"
          -sqlMigrationSuffixes="sql,ddl"
          -defaultSchema="devdb"
-         migrate -schemas="$(grep "SCHEMA:" migration-config.txt | cut -d " " -f 2-)" -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
+         migrate -schemas=Sname -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
 
   
       - run: >-    
