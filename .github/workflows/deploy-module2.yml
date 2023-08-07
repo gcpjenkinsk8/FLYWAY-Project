@@ -32,7 +32,8 @@ jobs:
       steps:
       - uses: actions/checkout@v3.0.0
 
-
+      - run: >-   
+         ls
       - run: >-    
          docker run --rm
          --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
