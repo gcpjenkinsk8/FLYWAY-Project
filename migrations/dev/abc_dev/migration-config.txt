@@ -1,0 +1,2 @@
+SCHEMA: devdb
+MigrationPath: migrations/dev/abc_dev
