@@ -38,13 +38,76 @@ jobs:
             ls
 
             # Extract the value from the text file (replace with your extraction command)
-            extracted_value=$(grep "SCHEMA:" dar-mig/migration-config.txt | cut -d " " -f 2-)
-            echo "Extracted Value: $extracted_value"
+            schema_value=$(grep "SCHEMA:" dar-mig/migration-config.txt | cut -d " " -f 2-)
+            migpath_value=$(grep "MigrationPath:" dar-mig/migration-config.txt | cut -d " " -f 2-)
+            echo "Extracted Value: $schema_value"
+            echo "Migration Path Value: $migpath_value"
             
             # Set the extracted value as an environment variable for later steps
-            echo "ExtractedValue=$extracted_value" >> $GITHUB_ENV
+            echo "SchemaValue=$schema_value" >> $GITHUB_ENV
+            echo "Migration-Path=$migpath_value" >> $GITHUB_ENV
             
         - name: Use Extracted Value
           run: |
             # Access the environment variable in subsequent steps
-            echo "Value extracted from text file: $ExtractedValue"  
+            echo "Value extracted from text file: $SchemaValue" 
+            echo "Value extracted from text file: $Migration-Path" 
+
+ Deploy-Test:
+      name: Deploy Module
+      runs-on: ubuntu-20.04
+   #   if: ${{ github.event.workflow_run.conclusion == 'success' }}
+      steps:
+      - uses: actions/checkout@v3.0.0
+
+      - run: >-   
+         Sname=$(grep "SCHEMA:" /dar-mig/migration-config.txt | cut -d " " -f 2-)
+      - run: >-    
+         docker run --rm
+         --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+         --volume ${{ github.workspace }}/reports:/flyway/reports
+         "${{ env.DOCKER_IMAGE }}"
+         -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+         -url="${{ secrets.DB_BUILD_URL }}"
+         -user="${{ secrets.DB_TEST_USERNAME }}"
+         -password="${{ secrets.DB_TEST_PASSWORD }}"  
+         -reportFilename="reports/report"
+         -sqlMigrationSuffixes="sql,ddl"
+         info -schemas=$SchemaValue
+
+      - run: >-
+         docker run --rm
+         --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+         --volume ${{ github.workspace }}/reports:/flyway/reports
+         "${{ env.DOCKER_IMAGE }}"
+         -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+         -url="${{ secrets.DB_BUILD_URL }}"
+         -user="${{ secrets.DB_TEST_USERNAME }}"
+         -password="${{ secrets.DB_TEST_PASSWORD }}"   
+         -reportFilename="reports/report"
+         -sqlMigrationSuffixes="sql,ddl"
+         -defaultSchema="devdb"
+         migrate -schemas=$SchemaValue -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
+
+  
+      - run: >-    
+         docker run --rm
+         --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+         --volume ${{ github.workspace }}/reports:/flyway/reports
+         "${{ env.DOCKER_IMAGE }}"
+         -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+         -url="${{ secrets.DB_BUILD_URL }}"
+         -user="${{ secrets.DB_TEST_USERNAME }}"
+         -password="${{ secrets.DB_TEST_PASSWORD }}"  
+         -reportFilename="reports/report"
+         -sqlMigrationSuffixes="sql,ddl"
+         info -schemas="${{ env.SCHEMAS }}"
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+         name: flyway-report
+         path: ${{ github.workspace }}/reports/report.html
+     
+
+           
