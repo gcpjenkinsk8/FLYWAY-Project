@@ -10,13 +10,13 @@ on:
      # - completed
       
   workflow_dispatch:       
-   inputs:
-       SchemaName:
-        description: 'Schema Name'     
-        required: false
-       MigrationFolder:
-        description: 'Migration Folder Path'     
-        required: false
+  #  inputs:
+  #      SchemaName:
+  #       description: 'Schema Name'     
+  #       required: false
+  #      MigrationFolder:
+  #       description: 'Migration Folder Path'     
+  #       required: false
     
 env:
     DOCKER_IMAGE: redgate/flyway
