@@ -45,17 +45,18 @@ jobs:
             
             # Set the extracted value as an environment variable for later steps
             echo "SchemaValue=$schema_value" >> $GITHUB_ENV
-            echo "Migration-Path=$migpath_value" >> $GITHUB_ENV
+            echo "MigrationPath=$migpath_value" >> $GITHUB_ENV
             
         - name: Use Extracted Value
           run: |
             # Access the environment variable in subsequent steps
             echo "Value extracted from text file: $SchemaValue" 
-            echo "Value extracted from text file: $Migration-Path" 
+            echo "Value extracted from text file: $MigrationPath" 
 
  Deploy-Test:
       name: Deploy Module
       runs-on: ubuntu-20.04
+      needs: extract-value
    #   if: ${{ github.event.workflow_run.conclusion == 'success' }}
       steps:
       - uses: actions/checkout@v3.0.0
@@ -87,7 +88,7 @@ jobs:
          -reportFilename="reports/report"
          -sqlMigrationSuffixes="sql,ddl"
          -defaultSchema="devdb"
-         migrate -schemas=$SchemaValue -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
+         migrate -schemas="${{ env.SchemaValue }}" -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
 
   
       - run: >-    
