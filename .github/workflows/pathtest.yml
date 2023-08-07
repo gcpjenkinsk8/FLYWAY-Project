@@ -77,9 +77,9 @@ jobs:
       #    --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
       #    schema_value1=$(grep "SCHEMA:" ${{ github.workspace }}/"${{ env.MigrationPath }}"/migration-config.txt | cut -d " " -f 2-) 
 
-      # - run: >-  
-      #    docker run --rm
-      #    echo "SchemaValue1=$schema_value1" >> $GITHUB_ENV
+      - run: >-  
+         docker run --rm
+         echo "Value extracted from text file: $SchemaValue" 
       - run: >-    
          docker run --rm
          --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
