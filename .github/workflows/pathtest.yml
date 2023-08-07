@@ -20,7 +20,8 @@ on:
     
 env:
     DOCKER_IMAGE: redgate/flyway
-    SCHEMAS: '${{ github.event.inputs.SchemaName }}'
+    # SCHEMAS: '${{ github.event.inputs.SchemaName }}'
+    SCHEMAS: $SchemaValue
     MigrationPath: '${{ github.event.inputs.MigrationFolder }}'
  
 jobs:
@@ -89,7 +90,7 @@ jobs:
          -reportFilename="reports/report"
          -sqlMigrationSuffixes="sql,ddl"
          -defaultSchema="devdb"
-         migrate -schemas=$SchemaValue -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
+         migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
 
   
       - run: >-    
