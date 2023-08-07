@@ -79,6 +79,7 @@ jobs:
 
       - run: >-  
          docker run --rm
+         "${{ env.DOCKER_IMAGE }}"
          echo "Value extracted from text file: $SchemaValue" 
       - run: >-    
          docker run --rm
