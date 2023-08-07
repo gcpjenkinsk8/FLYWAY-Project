@@ -57,12 +57,13 @@ jobs:
       name: Deploy Module
       runs-on: ubuntu-20.04
       needs: extract-value
-   #   if: ${{ github.event.workflow_run.conclusion == 'success' }}
+      # if: ${{ github.event.workflow_run.conclusion == 'success' }}
       steps:
       - uses: actions/checkout@v3.0.0
-
+     
+      
       - run: >-   
-         Sname=$(grep "SCHEMA:" /dar-mig/migration-config.txt | cut -d " " -f 2-)
+         echo "Value extracted from text file: $SchemaValue" 
       - run: >-    
          docker run --rm
          --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
