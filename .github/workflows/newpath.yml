@@ -8,7 +8,7 @@ name: DeployX
 env:
   DOCKER_IMAGE: redgate/flyway
   SCHEMAS: $SchemaValue
-  MigrationPath: '${{ github.event.inputs.MigrationFolder }}'
+  MigrationPath1: '${{ github.event.inputs.MigrationFolder }}'
 
 jobs:
  Deploy-Test:
@@ -33,7 +33,7 @@ jobs:
     - run: >-  
        docker run --rm
        nginx
-       echo "Value extracted from text file: $SchemaValue" 
+       echo "Value extracted from text file: $MigrationPath" 
     - run: >-    
        docker run --rm
        --volume /$MigrationPath:/flyway/sql:ro
