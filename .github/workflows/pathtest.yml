@@ -38,24 +38,25 @@ jobs:
           run: |
             ls
 
-            # Extract the value from the text file (replace with your extraction command)
             schema_value=$(grep "SCHEMA:" migrations/dev/Blockchain_Dev/migration-config.txt | cut -d " " -f 2-)
             migpath_value=$(grep "MigrationPath:" migrations/dev/Blockchain_Dev/migration-config.txt | cut -d " " -f 2-)
             echo "Extracted Value: $schema_value"
             echo "Migration Path Value: $migpath_value"
             
-            # Set the extracted value as an environment variable for later steps
             echo "SchemaValue=$schema_value" >> $GITHUB_ENV
             echo "MigrationPath=$migpath_value" >> $GITHUB_ENV
             
         - name: Use-Extracted-Value
           run: |
-            # Access the environment variable in subsequent steps
             echo "Value extracted from text file: $SchemaValue" 
             echo "Value extracted from text file: $MigrationPath" 
 
+           
       outputs:
-            myValue: $SchemaValue
+          myValue: ${{ steps.setVariable.outputs.SchemaValue }}
+      steps:
+      - id: step1
+       run: echo "SchemaValue=$schema_value" >> "$GITHUB_OUTPUT"
 
  Deploy-Test:
       name: Deploy Module
