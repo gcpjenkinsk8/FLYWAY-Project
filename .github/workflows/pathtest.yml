@@ -55,7 +55,7 @@ jobs:
         - run: >-  
             docker run --rm
             nginx
-            echo "Value extracted from text file: ${{ needs.extract-value.outputs.myValue }}"" 
+            echo "Value extracted from text file: ${{ needs.extract-value.outputs.myValue }}"
 
   # Deploy-Test:
   #     name: Deploy Module
