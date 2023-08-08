@@ -1,4 +1,4 @@
-name: Path Deploy2
+name: Path2 Deploy
 'on':
   workflow_dispatch:
     inputs:
