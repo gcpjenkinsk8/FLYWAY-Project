@@ -28,7 +28,8 @@ jobs:
 
  extract-value:
       runs-on: ubuntu-latest
-  
+      outputs:
+        myValue: ${{ steps.setVariable.outputs.SchemaValue }}
       steps:
         - name: Checkout code
           uses: actions/checkout@v2
@@ -51,14 +52,7 @@ jobs:
             echo "Value extracted from text file: $SchemaValue" 
             echo "Value extracted from text file: $MigrationPath" 
 
-           
-      outputs:
-          myValue: ${{ steps.setVariable.outputs.SchemaValue }}
-      steps:
-      - id: step1
-       run: echo "SchemaValue=$schema_value" >> "$GITHUB_OUTPUT"
-
- Deploy-Test:
+  Deploy-Test:
       name: Deploy Module
       runs-on: ubuntu-20.04
       needs: extract-value
@@ -69,7 +63,7 @@ jobs:
       - run: >-  
          docker run --rm
          nginx
-         echo "Value extracted from text file: ${{ needs.extract-value.outputs.myValue }}"" 
+         echo "Value extracted from text file: ${{ needs.save-value.outputs.myValue }}"" 
       - run: >-    
          docker run --rm
          --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
