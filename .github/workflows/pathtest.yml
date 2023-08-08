@@ -55,7 +55,7 @@ jobs:
         - run: >-  
             docker run --rm
             nginx
-            echo "Value extracted from text file: MigrationPath"
+            echo "Value extracted from text file: $MigrationPath"
 
  Deploy-Test:
       name: Deploy Module
