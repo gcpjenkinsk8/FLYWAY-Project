@@ -3,9 +3,6 @@ name: SQL Fluff Check
 on:
  workflow_dispatch:       
   inputs:
-      SchemaName:
-       description: 'Schema Name'     
-       required: true
       MigrationFolder:
        description: 'Migration Folder Path'     
        required: true
