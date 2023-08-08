@@ -15,9 +15,9 @@ jobs:
  name: Deploy Module
  runs-on: ubuntu-20.04
  steps:
- - uses: actions/checkout@v3.0.0
+    - uses: actions/checkout@v3.0.0
      
- - run: |
+    - run: |
           ls
 
           schema_value=$(grep "SCHEMA:" migrations/dev/Blockchain_Dev/migration-config.txt | cut -d " " -f 2-)
@@ -29,15 +29,15 @@ jobs:
           echo "MigrationPath=$migpath_value" >> $GITHUB_ENV
           
      
- - run: |
+    - run: |
       echo "Value extracted from text file: $SchemaValue" 
       echo "Value extracted from text file: $MigrationPath" 
 
- - run: >-  
+    - run: >-  
        docker run --rm
        nginx
        echo "Value extracted from text file: $SchemaValue" 
- - run: >-    
+    - run: >-    
        docker run --rm
        --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
        --volume ${{ github.workspace }}/reports:/flyway/reports
@@ -50,7 +50,7 @@ jobs:
        -sqlMigrationSuffixes="sql,ddl"
        info -schemas=$SchemaValue
 
- - run: >-
+    - run: >-
        docker run --rm
        --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
        --volume ${{ github.workspace }}/reports:/flyway/reports
@@ -65,7 +65,7 @@ jobs:
        migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
 
 
- - run: >-    
+    - run: >-    
        docker run --rm
        --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
        --volume ${{ github.workspace }}/reports:/flyway/reports
@@ -78,11 +78,11 @@ jobs:
        -sqlMigrationSuffixes="sql,ddl"
        info -schemas="${{ env.SCHEMAS }}"
 
-  - uses: actions/upload-artifact@v3
-    if: always()
-    with:
-    name: flyway-report
-    path: ${{ github.workspace }}/reports/report.html
+    - uses: actions/upload-artifact@v3
+      if: always()
+      with:
+       name: flyway-report
+       path: ${{ github.workspace }}/reports/report.html
    
 
          
