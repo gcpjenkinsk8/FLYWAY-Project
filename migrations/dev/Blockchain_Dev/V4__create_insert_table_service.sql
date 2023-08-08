@@ -1,12 +1,15 @@
-CREATE TABLE services (
-    id INT PRIMARY KEY,
-    name VARCHAR(50),
-    age INT,
-    email VARCHAR(100)
-);
-
-INSERT INTO services (id, name, age, email)
-VALUES
-    (1, 'John Doe', 30, 'john@example.com'),
-    (2, 'Jane Smith', 25, 'jane@example.com'),
-    (3, 'Bob Johnson', 28, 'bob@example.com');
+CREATE PIPELINE `figRewards`
+AS LOAD DATA LINK link_kafka_dev 'nonprod-0-digitalassetresearch-b9b3.aivencloud.com:23893/figment_rewards_test'
+BATCH_INTERVAL 1000
+MAX_PARTITIONS_PER_BATCH 1
+ENABLE OUT_OF_ORDER OPTIMIZATION
+DISABLE OFFSETS METADATA GC
+REPLACE
+INTO TABLE `figEthRewards`
+FORMAT JSON
+(
+    `figEthRewards`.`dateReward` <- `date`,
+    `figEthRewards`.`value` <- `value`,
+    `figEthRewards`.`staking` <- `staking`,
+    `figEthRewards`.`tips` <- `tips`
+)
