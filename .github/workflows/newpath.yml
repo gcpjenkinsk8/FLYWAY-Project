@@ -36,7 +36,7 @@ jobs:
        echo "Value extracted from text file: $MigrationPath" 
     - run: >-    
        docker run --rm
-       --volume /$MigrationPath:/flyway/sql:ro
+       --volume ${{ github.workspace }}/$MigrationPath:/flyway/sql:ro
        --volume ${{ github.workspace }}/reports:/flyway/reports
        "${{ env.DOCKER_IMAGE }}"
        -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
@@ -49,7 +49,7 @@ jobs:
 
     - run: >-
        docker run --rm
-       --volume /$MigrationPath:/flyway/sql:ro
+       --volume ${{ github.workspace }}//$MigrationPath:/flyway/sql:ro
        --volume ${{ github.workspace }}/reports:/flyway/reports
        "${{ env.DOCKER_IMAGE }}"
        -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
