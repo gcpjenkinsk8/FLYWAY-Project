@@ -1,16 +1,88 @@
-name: 'New Path Deploy'
-
- workflow_dispatch:       
-  inputs:
-#      SchemaName:
-#       description: 'Schema Name'     
-#       required: false
-    MigrationFolder:
-     description: 'Migration Folder Path'     
-     required: false
-
+name: Path Deploy
+'on':
+  workflow_dispatch:
+    inputs:
+      MigrationFolder:
+        description: Migration Folder Path
+        required: false
 env:
-DOCKER_IMAGE: redgate/flyway
-# SCHEMAS: '${{ github.event.inputs.SchemaName }}'
-SCHEMAS: $SchemaValue
-MigrationPath: '${{ github.event.inputs.MigrationFolder }}'
+  DOCKER_IMAGE: redgate/flyway
+  SCHEMAS: $SchemaValue
+  MigrationPath: '${{ github.event.inputs.MigrationFolder }}'
+
+jobs:
+ Deploy-Test:
+ name: Deploy Module
+ runs-on: ubuntu-20.04
+ steps:
+ - uses: actions/checkout@v3.0.0
+     
+ - run: |
+          ls
+
+          schema_value=$(grep "SCHEMA:" migrations/dev/Blockchain_Dev/migration-config.txt | cut -d " " -f 2-)
+          migpath_value=$(grep "MigrationPath:" migrations/dev/Blockchain_Dev/migration-config.txt | cut -d " " -f 2-)
+          echo "Extracted Value: $schema_value"
+          echo "Migration Path Value: $migpath_value"
+          
+          echo "SchemaValue=$schema_value" >> $GITHUB_ENV
+          echo "MigrationPath=$migpath_value" >> $GITHUB_ENV
+          
+     
+ - run: |
+      echo "Value extracted from text file: $SchemaValue" 
+      echo "Value extracted from text file: $MigrationPath" 
+
+ - run: >-  
+       docker run --rm
+       nginx
+       echo "Value extracted from text file: $SchemaValue" 
+ - run: >-    
+       docker run --rm
+       --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+       --volume ${{ github.workspace }}/reports:/flyway/reports
+       "${{ env.DOCKER_IMAGE }}"
+       -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+       -url="${{ secrets.DB_BUILD_URL }}"
+       -user="${{ secrets.DB_TEST_USERNAME }}"
+       -password="${{ secrets.DB_TEST_PASSWORD }}"  
+       -reportFilename="reports/report"
+       -sqlMigrationSuffixes="sql,ddl"
+       info -schemas=$SchemaValue
+
+ - run: >-
+       docker run --rm
+       --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+       --volume ${{ github.workspace }}/reports:/flyway/reports
+       "${{ env.DOCKER_IMAGE }}"
+       -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+       -url="${{ secrets.DB_BUILD_URL }}"
+       -user="${{ secrets.DB_TEST_USERNAME }}"
+       -password="${{ secrets.DB_TEST_PASSWORD }}"   
+       -reportFilename="reports/report"
+       -sqlMigrationSuffixes="sql,ddl"
+       -defaultSchema="devdb"
+       migrate -schemas="${{ env.SCHEMAS }}" -outOfOrder=false -baselineOnMigrate="true" -baselineVersion="0.0" -baselineDescription='existing version' -validateOnMigrate=true
+
+
+ - run: >-    
+       docker run --rm
+       --volume ${{ github.workspace }}/"${{ env.MigrationPath }}":/flyway/sql:ro
+       --volume ${{ github.workspace }}/reports:/flyway/reports
+       "${{ env.DOCKER_IMAGE }}"
+       -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
+       -url="${{ secrets.DB_BUILD_URL }}"
+       -user="${{ secrets.DB_TEST_USERNAME }}"
+       -password="${{ secrets.DB_TEST_PASSWORD }}"  
+       -reportFilename="reports/report"
+       -sqlMigrationSuffixes="sql,ddl"
+       info -schemas="${{ env.SCHEMAS }}"
+
+  - uses: actions/upload-artifact@v3
+    if: always()
+    with:
+    name: flyway-report
+    path: ${{ github.workspace }}/reports/report.html
+   
+
+         
