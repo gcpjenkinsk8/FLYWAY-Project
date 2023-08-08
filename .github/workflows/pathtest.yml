@@ -65,6 +65,22 @@ jobs:
       steps:
       - uses: actions/checkout@v3.0.0
      
+      - run: |
+            ls
+
+            schema_value=$(grep "SCHEMA:" migrations/dev/Blockchain_Dev/migration-config.txt | cut -d " " -f 2-)
+            migpath_value=$(grep "MigrationPath:" migrations/dev/Blockchain_Dev/migration-config.txt | cut -d " " -f 2-)
+            echo "Extracted Value: $schema_value"
+            echo "Migration Path Value: $migpath_value"
+            
+            echo "SchemaValue=$schema_value" >> $GITHUB_ENV
+            echo "MigrationPath=$migpath_value" >> $GITHUB_ENV
+            
+       
+      - run: |
+        echo "Value extracted from text file: $SchemaValue" 
+        echo "Value extracted from text file: $MigrationPath" 
+
       - run: >-  
          docker run --rm
          nginx

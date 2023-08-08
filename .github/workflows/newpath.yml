@@ -1,0 +1,16 @@
+name: 'New Path Deploy'
+
+ workflow_dispatch:       
+  inputs:
+#      SchemaName:
+#       description: 'Schema Name'     
+#       required: false
+    MigrationFolder:
+     description: 'Migration Folder Path'     
+     required: false
+
+env:
+DOCKER_IMAGE: redgate/flyway
+# SCHEMAS: '${{ github.event.inputs.SchemaName }}'
+SCHEMAS: $SchemaValue
+MigrationPath: '${{ github.event.inputs.MigrationFolder }}'
