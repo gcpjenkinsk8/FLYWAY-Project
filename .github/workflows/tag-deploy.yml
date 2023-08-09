@@ -34,4 +34,6 @@ jobs:
           # Echo the local folder path
           echo "Picked files from tag $tag_name are stored in: ${{ github.workspace }}/picked-files"
 
+      - name: ls
+        run: |
           ls -a ${{ github.workspace }}/picked-files
