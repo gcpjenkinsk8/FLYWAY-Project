@@ -1,4 +1,4 @@
-name: DeployX
+name: Deploy-Branch
 'on':
   workflow_dispatch:
     # inputs:
