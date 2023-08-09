@@ -1,4 +1,4 @@
-name: 'Label Tag Module'
+name: 'Label Deploy Module'
  
 on:
     pull_request:

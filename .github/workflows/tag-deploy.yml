@@ -1,0 +1,35 @@
+name: Tag File Pick
+
+on:
+  push:
+    tags:
+      - 'v*'  # Specify the tag pattern you want to trigger the workflow on
+
+jobs:
+  pick-files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Prepare local directory
+        run: |
+          mkdir -p picked-files
+        working-directory: ${{ github.workspace }}
+
+      - name: Run workflow for tagged release
+        run: |
+          # Retrieve the tag name from the environment variable
+          tag_name=${{ github.ref }}
+
+          # Extract files from the tagged release and copy to the local directory
+          git archive --format=tar --prefix=picked-files/ $tag_name | tar xf -
+          
+          # Echo the local folder path
+          echo "Picked files from tag $tag_name are stored in: ${{ github.workspace }}/picked-files"
