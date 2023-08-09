@@ -1,0 +1,49 @@
+name: 'Migration Module 2'
+ 
+on:
+
+  workflow_dispatch:       
+
+    
+env:
+    DOCKER_IMAGE: redgate/flyway
+    SCHEMAS: '${{ github.event.inputs.SchemaName }}'
+    MigrationPath: '${{ github.event.inputs.MigrationFolder }}'
+ 
+jobs:
+   
+ process-files:
+          runs-on: ubuntu-latest
+      
+          steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+      
+            - name: Set up Python
+              uses: actions/setup-python@v2
+              with:
+                python-version: 3.x
+      
+            - name: Prepare local directory
+              run: |
+                mkdir -p picked-files
+              working-directory: ${{ github.workspace }}
+      
+            - name: Run workflow for labeled PR
+              if: ${{ github.event.label.name == 'file-pick' }}
+              run: |
+                # Use the GitHub API to get the list of modified files in the labeled PR
+                pr_number="${{ github.event.pull_request.number }}"
+                files=$(curl -s -H "Authorization: Bearer ${{ secrets.GIT_TOKEN }}" \
+                         "https://api.github.com/repos/${{ github.repository }}/pulls/${pr_number}/files" | \
+                         jq -r '.[].filename')
+      
+                # Copy picked files to the local directory
+                for file in $files; do
+                  cp "$file" picked-files/
+                done
+      
+                # Echo the local folder path
+                echo "Picked files are stored in: ${{ github.workspace }}/picked-files"
+      
+ 
