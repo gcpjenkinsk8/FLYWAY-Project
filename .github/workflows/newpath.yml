@@ -1,10 +1,10 @@
 name: DeployX
 'on':
   workflow_dispatch:
-    inputs:
-      MigrationFolder:
-        description: Migration Folder Path
-        required: false
+    # inputs:
+    #   MigrationFolder:
+    #     description: Migration Folder Path
+    #     required: false
 env:
   DOCKER_IMAGE: redgate/flyway
   SCHEMAS: $SchemaValue
