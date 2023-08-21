@@ -2,8 +2,8 @@ name: Connect to Lightsail Windows Server
 
 on:
   push:
-    branches:
-      - main  # Change this to your main branch name
+    tags:
+      - 'lightsailbundle*'  # Change this to your tag name
 
 jobs:
   connect-to-lightsail:
