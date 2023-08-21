@@ -1,9 +1,7 @@
 name: Connect to Lightsail Windows Server
 
 on:
-  push:
-    tags:
-      - 'lightsailbundle*'  # Change this to your tag name
+ workflow_dispatch: 
 
 jobs:
   connect-to-lightsail:
