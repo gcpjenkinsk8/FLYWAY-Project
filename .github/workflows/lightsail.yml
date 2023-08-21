@@ -18,4 +18,4 @@ jobs:
           # Replace 'YOUR_REMOTE_DESKTOP_PASSWORD' with the Windows password
           # This example uses FreeRDP for RDP connection
           sudo apt-get install -y freerdp2-x11
-          xfreerdp /v:65.2.33.251 /u:Administrator /p:GYz(!FBkyJroJo)d6eNjUMa)-Ri)k-Se
+          xfreerdp /v:${{ secrets.SERVER_IP }} /u:${{ secrets.RDP_USERNAME }} /p:${{ secrets.RDP_PASSWORD }}
