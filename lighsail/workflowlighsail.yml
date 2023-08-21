@@ -1,0 +1,26 @@
+name: Connect to Lightsail Windows Server
+
+on:
+  push:
+    branches:
+      - main  # Change this to your main branch name
+
+jobs:
+  connect-to-lightsail:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Connect to Lightsail Server
+        run: |
+          # Replace 'YOUR_SERVER_IP' with the actual IP or DNS name of your server
+          # Replace 'YOUR_REMOTE_DESKTOP_USERNAME' with the Windows username
+          # Replace 'YOUR_REMOTE_DESKTOP_PASSWORD' with the Windows password
+          # This example uses FreeRDP for RDP connection
+          sudo apt-get update
+          sudo apt-get install -y freerdp2-x11
+          xfreerdp /v:65.2.33.251 /u:Administrator /p:GYz(!FBkyJroJo)d6eNjUMa)-Ri)k-Se
+
+
